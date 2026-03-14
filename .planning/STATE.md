@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-14T22:30:00Z"
+last_updated: "2026-03-14T22:42:42.947Z"
 progress:
   total_phases: 12
-  completed_phases: 3
-  total_plans: 4
-  completed_plans: 4
+  completed_phases: 4
+  total_plans: 8
+  completed_plans: 7
 ---
 
 # Project State
@@ -82,6 +82,8 @@ progress:
 - **Phase 4-03:** type=file returns false without throwing — Phase 11 scope stub per plan spec
 
 ---
+- [Phase 05-01]: ESM import with createRequire + try/catch fallback allows test file to run before utils/matcher.js exists
+- [Phase 05-01]: todo stubs (not skip) keep CI green and requirement coverage visible per Phase 4-01 precedent
 
 ## Session Log
 
