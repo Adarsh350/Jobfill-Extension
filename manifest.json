@@ -1,0 +1,73 @@
+{
+  "manifest_version": 3,
+  "name": "JobFill",
+  "version": "1.0.0",
+  "description": "Auto-fills job application forms on Greenhouse, Lever, Workday, Ashby, iCIMS, LinkedIn, and Bayt",
+  "permissions": ["storage", "scripting", "activeTab", "tabs"],
+  "host_permissions": [
+    "https://*.greenhouse.io/*",
+    "https://*.lever.co/*",
+    "https://*.myworkdayjobs.com/*",
+    "https://*.ashbyhq.com/*",
+    "https://*.icims.com/*",
+    "https://www.linkedin.com/jobs/*",
+    "https://www.bayt.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "commands": {
+    "fill-form": {
+      "suggested_key": { "default": "Alt+Shift+F" },
+      "description": "Auto-fill the current form"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.greenhouse.io/*",
+        "https://*.lever.co/*",
+        "https://*.myworkdayjobs.com/*",
+        "https://*.ashbyhq.com/*",
+        "https://*.icims.com/*",
+        "https://www.linkedin.com/jobs/*",
+        "https://www.bayt.com/*"
+      ],
+      "js": [
+        "utils/storage.js",
+        "utils/matcher.js",
+        "utils/events.js",
+        "utils/filler.js",
+        "utils/overlay.js",
+        "platforms/greenhouse.js",
+        "platforms/lever.js",
+        "platforms/workday.js",
+        "platforms/ashby.js",
+        "platforms/icims.js",
+        "platforms/linkedin.js",
+        "platforms/bayt.js",
+        "platforms/generic.js",
+        "content.js"
+      ],
+      "css": ["content.css"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'"
+  }
+}
