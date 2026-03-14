@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-14T22:13:44.701Z"
+last_updated: "2026-03-14T22:15:30Z"
 progress:
   total_phases: 12
   completed_phases: 3
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 4
+  completed_plans: 4
 ---
 
 # Project State
@@ -21,9 +21,9 @@ progress:
 
 ## Current Status
 
-**Phase:** 03-background-service-worker (complete)
-**Active Phase:** Phase 3 complete — Phase 4, Plan 01 next
-**Next Action:** Begin Phase 4 — utils/events.js and utils/filler.js React/Angular event dispatch primitives
+**Phase:** 04-react-angular-event-dispatch-and-form-fill-primitives (in progress — Plan 01 complete)
+**Active Phase:** Phase 4, Plan 01 complete — Plan 02 next (implement utils/events.js)
+**Next Action:** Phase 4 Plan 02 — implement utils/events.js (fillInput, fillSelect, fillCheckbox, fillRadio, fillTextarea) and un-todo events.test.js stubs
 
 ---
 
@@ -51,7 +51,7 @@ progress:
 | 1 | Project Scaffold & Manifest | 🔄 In Progress (UAT pending) |
 | 2 | Chrome Storage Utility Layer | ✅ Complete (UAT passed 2026-03-14) |
 | 3 | Background Service Worker | ✅ Complete (2026-03-14) |
-| 4 | React/Angular Event Dispatch & Fill Primitives | ⬜ Not started |
+| 4 | React/Angular Event Dispatch & Fill Primitives | 🔄 In Progress (Plan 01/3 complete) |
 | 5 | Fuzzy Matcher & Answer Bank Engine | ⬜ Not started |
 | 6 | Content Script Coordinator & Fill Overlay | ⬜ Not started |
 | 7 | Greenhouse & Lever Platform Modules | ⬜ Not started |
@@ -74,6 +74,9 @@ progress:
 - **Phase 3:** triggerFill uses callback form of chrome.tabs.sendMessage (not await) — lastError only reliably accessible synchronously inside callback
 - **Phase 3:** handleMessage declared as plain function not async — async listeners cannot return true synchronously, breaking Chrome message channel
 - **Phase 3:** RESUME_UPLOAD_FALLBACK stub registered now so Phase 11 has clean integration point without router restructure
+- **Phase 4-01:** todo stub pattern used (not skip) — node:test todo stubs show as passing with annotation, keeping CI green and requirement coverage visible
+- **Phase 4-01:** native setter spy installed at Object.defineProperty on HTMLInputElement.prototype — mirrors how events.js must call it to trigger React/Angular synthetic events
+- **Phase 4-01:** MockMutationObserver._trigger() exposes manual callback firing for deterministic waitForElement tests without real timers
 
 ---
 
@@ -85,6 +88,7 @@ progress:
 - **2026-03-14:** Phase 2 Plan 01 execution: Tasks 1-2 complete (utils/storage.js — 12 functions, sync/local/session routing). Stopped at checkpoint:human-verify — awaiting browser UAT.
 - **2026-03-14:** Phase 2 Plan 01 UAT passed — "ALL STORAGE TESTS PASSED" confirmed in Brave DevTools. Phase 2 complete.
 - **2026-03-14:** Phase 3 Plan 01 execution: background.js fully implemented (124 lines). Message router, triggerFill relay, getStatus, exportData, importData, mergeAnswerBank, keyboard shortcut handler. Zero window references. Phase 3 complete.
+- **2026-03-14:** Phase 4 Plan 01 execution: Wave 0 TDD scaffold complete. tests/helpers/dom-mock.js (Node DOM shim, native setter spy), tests/unit/events.test.js (9 todo stubs), tests/unit/filler.test.js (6 todo stubs), tests/run-all.js. All 14 TEST: anchors present. node --test exits 0.
 
 ---
 
