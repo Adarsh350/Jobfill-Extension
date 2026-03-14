@@ -8,9 +8,9 @@
 
 ## Current Status
 
-**Phase:** 01-project-scaffold-and-manifest (in progress — awaiting UAT)
-**Active Phase:** Phase 1, Plan 01 — Tasks 1-3 complete, Task 4 (checkpoint:human-verify) pending
-**Next Action:** UAT in Chrome — load `C:\Users\JobSearch\Documents\Projects` via `chrome://extensions > Load Unpacked`, verify zero errors, icon in toolbar, popup opens
+**Phase:** 02-chrome-storage-utility-layer (in progress — awaiting UAT)
+**Active Phase:** Phase 2, Plan 01 — Tasks 1-2 complete, Task 3 (checkpoint:human-verify) pending
+**Next Action:** UAT in Brave — reload extension at brave://extensions, run storage round-trip tests in DevTools console, verify sync/local/session routing
 
 ---
 
@@ -36,7 +36,7 @@
 | Phase | Title | Status |
 |-------|-------|--------|
 | 1 | Project Scaffold & Manifest | 🔄 In Progress (UAT pending) |
-| 2 | Chrome Storage Utility Layer | ⬜ Not started |
+| 2 | Chrome Storage Utility Layer | 🔄 In Progress (UAT pending) |
 | 3 | Background Service Worker | ⬜ Not started |
 | 4 | React/Angular Event Dispatch & Fill Primitives | ⬜ Not started |
 | 5 | Fuzzy Matcher & Answer Bank Engine | ⬜ Not started |
@@ -55,6 +55,9 @@
 - **Phase 1:** `all_frames: true` included per FR-7.2 (iCIMS cross-frame injection), overriding RESEARCH.md recommendation to defer to Phase 9
 - **Phase 1:** `window.JobFill` namespace guard applied to all JS stubs for safe multi-file content script sharing in isolated world
 - **Phase 1:** PNG icons use RGB color_type=2 (per PLAN.md spec) rather than RGBA — both valid formats
+- **Phase 2:** Resume routes to chrome.storage.local (not sync) — base64 PDF can reach 400 KB; sync per-item limit is 8,192 bytes
+- **Phase 2:** getBytesInUse uses callback form wrapped in Promise — Promise API unreliable across Chrome versions
+- **Phase 2:** getFillStatus/saveFillStatus require Phase 3 session.setAccessLevel before working from content scripts
 
 ---
 
@@ -63,6 +66,7 @@
 - **2026-03-13:** Project initialized. PROJECT.md and config.json created and committed.
 - **2026-03-14:** Research agents completed (STACK, ARCHITECTURE, CONCERNS). FEATURES.md agent hit rate limit twice, resumed. SUMMARY.md, REQUIREMENTS.md, ROADMAP.md, STATE.md created. Planning phase complete.
 - **2026-03-14:** Phase 1 Plan 01 execution: Tasks 1-3 complete (manifest.json, 19 stub files, 3 PNG icons). Stopped at checkpoint:human-verify — awaiting Chrome UAT.
+- **2026-03-14:** Phase 2 Plan 01 execution: Tasks 1-2 complete (utils/storage.js — 12 functions, sync/local/session routing). Stopped at checkpoint:human-verify — awaiting browser UAT.
 
 ---
 
