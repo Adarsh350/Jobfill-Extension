@@ -8,9 +8,9 @@
 
 ## Current Status
 
-**Phase:** 02-chrome-storage-utility-layer (in progress — awaiting UAT)
-**Active Phase:** Phase 2, Plan 01 — Tasks 1-2 complete, Task 3 (checkpoint:human-verify) pending
-**Next Action:** UAT in Brave — reload extension at brave://extensions, run storage round-trip tests in DevTools console, verify sync/local/session routing
+**Phase:** 03-background-service-worker (not started)
+**Active Phase:** Phase 2 complete — Phase 3, Plan 01 next
+**Next Action:** Begin Phase 3 — background.js service worker with session setAccessLevel, message routing, and keyboard shortcut handler
 
 ---
 
@@ -36,7 +36,7 @@
 | Phase | Title | Status |
 |-------|-------|--------|
 | 1 | Project Scaffold & Manifest | 🔄 In Progress (UAT pending) |
-| 2 | Chrome Storage Utility Layer | 🔄 In Progress (UAT pending) |
+| 2 | Chrome Storage Utility Layer | ✅ Complete (UAT passed 2026-03-14) |
 | 3 | Background Service Worker | ⬜ Not started |
 | 4 | React/Angular Event Dispatch & Fill Primitives | ⬜ Not started |
 | 5 | Fuzzy Matcher & Answer Bank Engine | ⬜ Not started |
@@ -67,6 +67,7 @@
 - **2026-03-14:** Research agents completed (STACK, ARCHITECTURE, CONCERNS). FEATURES.md agent hit rate limit twice, resumed. SUMMARY.md, REQUIREMENTS.md, ROADMAP.md, STATE.md created. Planning phase complete.
 - **2026-03-14:** Phase 1 Plan 01 execution: Tasks 1-3 complete (manifest.json, 19 stub files, 3 PNG icons). Stopped at checkpoint:human-verify — awaiting Chrome UAT.
 - **2026-03-14:** Phase 2 Plan 01 execution: Tasks 1-2 complete (utils/storage.js — 12 functions, sync/local/session routing). Stopped at checkpoint:human-verify — awaiting browser UAT.
+- **2026-03-14:** Phase 2 Plan 01 UAT passed — "ALL STORAGE TESTS PASSED" confirmed in Brave DevTools. Phase 2 complete.
 
 ---
 
