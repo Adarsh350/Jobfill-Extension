@@ -61,7 +61,7 @@ Plans:
 **Status:** Complete (2026-03-14) — 1/1 plans complete
 
 **Plans:**
-- [x] 01-PLAN.md — MV3 service worker: setAccessLevel, message router (5 branches), triggerFill DO_FILL relay, getStatus, exportData (schemaVersion:1), importData+mergeAnswerBank, Alt+Shift+F shortcut — commit 840ff2f
+1/1 plans complete
 
 1. Top-level `chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' })` on service worker startup
 2. `chrome.runtime.onMessage` listener registered at top level (not async — returns `true` for async paths)
@@ -80,16 +80,12 @@ Plans:
 
 **Goal:** `utils/events.js` and `utils/filler.js` implement the correct patterns for filling inputs on React/Angular/vanilla forms.
 
-**Plans:**
-1. `utils/events.js` → `window.JobFill.events`: implement `fillInput(el, value)` using native `HTMLInputElement.prototype` value setter + dispatch `input` + `change` events with `{ bubbles: true }`
-2. `fillSelect(el, value)` — exact match first, then case-insensitive includes, then dispatch `change` event
-3. `fillCheckbox(el, checked)` — set `.checked`, dispatch `change` event
-4. `fillRadio(el)` — set `.checked = true`, dispatch `change` + `.click()`
-5. `fillTextarea(el, value)` — same as `fillInput` using `HTMLTextAreaElement.prototype` setter
-6. `utils/filler.js` → `window.JobFill.filler`: `fillField(el, value)` dispatcher that detects element type and calls the right events.js method
-7. `waitForElement(selector, timeout)` — returns Promise, polls for element up to timeout (for cascading dropdowns)
-8. `shadowQuery(root, selector)` — recursive shadow-piercing querySelector for Workday
-9. Fill lock: `window.JobFill.filler.isFilling` boolean, `startFill()` / `endFill()` methods
+**Plans:** 3 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Wave 0: test infrastructure — dom-mock.js shim + events.test.js + filler.test.js stubs (14 TEST: anchors, all todo)
+- [ ] 04-02-PLAN.md — Implement utils/events.js: fillInput (native prototype setter), fillSelect, fillCheckbox, fillRadio, fillTextarea, dispatchInputChange, dispatchBlur — 8 tests green
+- [ ] 04-03-PLAN.md — Implement utils/filler.js: fillField dispatcher, waitForElement (MutationObserver, 3000ms), shadowQuery/shadowQueryAll, fill lock (isFilling/startFill/endFill) — 6 tests green
 
 **UAT Criteria:** Open a Greenhouse test job application. Open DevTools console. Run `window.JobFill.events.fillInput(document.querySelector('input[name="first_name"]'), "Test")` — verify React state updates (field shows value, no blank on blur).
 
