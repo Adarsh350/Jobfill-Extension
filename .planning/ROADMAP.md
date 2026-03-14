@@ -41,7 +41,7 @@ Plans:
 **Status:** Complete (UAT passed 2026-03-14) — 1/1 plans complete
 
 **Plans:**
-1. Implement `window.JobFill.storage` namespace object with guard (`window.JobFill = window.JobFill || {}`)
+1/1 plans complete
 2. `getProfile()` / `saveProfile(data)` — reads/writes `chrome.storage.sync["profile"]`
 3. `getAnswerBank()` / `saveAnswerBank(entries)` — reads/writes `chrome.storage.sync["answerBank"]` with `.catch()` quota error handler
 4. `getResume()` / `saveResume(resumeObj)` / `clearResume()` — reads/writes `chrome.storage.local["resume"]`
@@ -58,7 +58,11 @@ Plans:
 
 **Goal:** `background.js` routes messages between popup and content scripts, handles keyboard shortcut, and initializes session storage access.
 
+**Status:** Complete (2026-03-14) — 1/1 plans complete
+
 **Plans:**
+- [x] 01-PLAN.md — MV3 service worker: setAccessLevel, message router (5 branches), triggerFill DO_FILL relay, getStatus, exportData (schemaVersion:1), importData+mergeAnswerBank, Alt+Shift+F shortcut — commit 840ff2f
+
 1. Top-level `chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' })` on service worker startup
 2. `chrome.runtime.onMessage` listener registered at top level (not async — returns `true` for async paths)
 3. Handle `TRIGGER_FILL` message: query active tab, send `DO_FILL` to tab via `chrome.tabs.sendMessage`, forward response back to popup
