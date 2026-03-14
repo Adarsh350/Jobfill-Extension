@@ -21,9 +21,9 @@ progress:
 
 ## Current Status
 
-**Phase:** 04-react-angular-event-dispatch-and-form-fill-primitives (in progress — Plan 01 complete)
-**Active Phase:** Phase 4, Plan 01 complete — Plan 02 next (implement utils/events.js)
-**Next Action:** Phase 4 Plan 02 — implement utils/events.js (fillInput, fillSelect, fillCheckbox, fillRadio, fillTextarea) and un-todo events.test.js stubs
+**Phase:** 04-react-angular-event-dispatch-and-form-fill-primitives (in progress — Plans 01-02 complete)
+**Active Phase:** Phase 4, Plan 02 complete — Plan 03 next (implement utils/filler.js)
+**Next Action:** Phase 4 Plan 03 — implement utils/filler.js (waitForElement, fillForm, platform detection) and un-todo filler.test.js stubs
 
 ---
 
@@ -89,6 +89,7 @@ progress:
 - **2026-03-14:** Phase 2 Plan 01 UAT passed — "ALL STORAGE TESTS PASSED" confirmed in Brave DevTools. Phase 2 complete.
 - **2026-03-14:** Phase 3 Plan 01 execution: background.js fully implemented (124 lines). Message router, triggerFill relay, getStatus, exportData, importData, mergeAnswerBank, keyboard shortcut handler. Zero window references. Phase 3 complete.
 - **2026-03-14:** Phase 4 Plan 01 execution: Wave 0 TDD scaffold complete. tests/helpers/dom-mock.js (Node DOM shim, native setter spy), tests/unit/events.test.js (9 todo stubs), tests/unit/filler.test.js (6 todo stubs), tests/run-all.js. All 14 TEST: anchors present. node --test exits 0.
+- **2026-03-14:** Phase 4 Plan 02 execution: utils/events.js implemented (7 functions, IIFE pattern, native setter). All 9 events.test.js tests pass (0 fail, 0 todo). Commit c07b961.
 
 ---
 
