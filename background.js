@@ -47,7 +47,7 @@ async function triggerFill(sendResponse) {
     sendResponse({ error: 'No active tab found.' });
     return;
   }
-  chrome.tabs.sendMessage(tab.id, { type: 'DO_FILL' }, (response) => {
+  chrome.tabs.sendMessage(tab.id, { type: 'DO_FILL', tabId: tab.id }, (response) => {
     if (chrome.runtime.lastError) {
       const msg = chrome.runtime.lastError.message || '';
       if (msg.includes('invalidated')) {
