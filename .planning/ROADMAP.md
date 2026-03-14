@@ -24,6 +24,8 @@
 
 **Goal:** Create the complete directory structure and a valid, loadable `manifest.json` that Chrome accepts without errors.
 
+**Status:** In Progress (UAT pending)
+
 **Plans:** 1/1 plans complete
 
 Plans:
@@ -35,6 +37,8 @@ Plans:
 ## Phase 2: Chrome Storage Utility Layer
 
 **Goal:** `utils/storage.js` exposes a complete, quota-safe storage API that all other modules use.
+
+**Status:** Complete (UAT passed 2026-03-14) — 1/1 plans complete
 
 **Plans:**
 1. Implement `window.JobFill.storage` namespace object with guard (`window.JobFill = window.JobFill || {}`)
