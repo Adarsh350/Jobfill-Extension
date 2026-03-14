@@ -24,14 +24,10 @@
 
 **Goal:** Create the complete directory structure and a valid, loadable `manifest.json` that Chrome accepts without errors.
 
-**Plans:**
-1. Create root directory structure: `icons/`, `utils/`, `platforms/` subdirectories
-2. Write `manifest.json` with MV3 fields: name, version, description, manifest_version, permissions (`storage`, `scripting`, `activeTab`, `tabs`), host_permissions (7 ATS domains), background service worker, action/popup, content_scripts array (all 13 files in load order), commands (Alt+Shift+F), CSP (`script-src 'self'; object-src 'none'`)
-3. Create placeholder icon files: `icons/icon16.png`, `icons/icon48.png`, `icons/icon128.png` (solid color PNGs, updated in polish phase)
-4. Create all empty stub files in correct locations (each file has a 1-line comment identifying it)
-5. Create `popup.html` shell (no inline scripts, loads `popup.css` and `popup.js`, correct DOCTYPE)
-6. Verify extension loads in Chrome: `chrome://extensions > Load Unpacked` with zero manifest errors
+**Plans:** 1 plan
 
+Plans:
+- [ ] 01-PLAN.md — Create all 22 scaffold files: manifest.json (MV3), 3 PNG icons, 14 JS stubs (utils + platforms + coordinators), popup shell, and verify Chrome load with zero errors
 **UAT Criteria:** Extension icon appears in Chrome toolbar. No errors in `chrome://extensions`. Popup opens (blank is fine).
 
 ---
