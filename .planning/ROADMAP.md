@@ -95,7 +95,7 @@ Plans:
 
 **Goal:** `utils/matcher.js` implements the complete offline keyword + fuzzy matching system for answer bank lookups and dropdown value matching.
 
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 05-01-PLAN.md — Wave 0: create tests/unit/matcher.test.js with todo stubs for all 7 functions
@@ -109,16 +109,11 @@ Plans:
 
 **Goal:** `content.js` detects the platform, shows floating UI, handles fill trigger messages, and renders the fill status overlay.
 
-**Plans:**
-1. `content.js` IIFE: detect platform via `Object.values(window.JobFill.platforms).find(p => p.matches(hostname))`
-2. Register `chrome.runtime.onMessage` listener for `DO_FILL`: call `runFill(platform)`, `return true` for async
-3. MutationObserver on `document.body` for SPA navigation: detect new form elements, re-show fill button
-4. Disconnect MutationObserver when overlay is dismissed (memory management)
-5. Fill lock check in `runFill()`: if `isFilling` true, send back `{ status: 'busy' }`
-6. `utils/overlay.js` → `window.JobFill.overlay`: `showButton()` — renders floating "✨ Fill Form" button (Shadow DOM mounted)
-7. `overlay.showResults(fillResults)` — renders colour-coded result list (filled/skipped/failed/needs_review) in Shadow DOM
-8. Overlay styles scoped inside shadow tree; draggable; X to dismiss; position saved in settings
-9. Extension context invalidated handler: catch error, show non-alarming banner to reload tab
+**Plans:** 2 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — content.js IIFE: platform detection, non-async DO_FILL onMessage (return true), fill lock, MutationObserver with #jobfill-overlay-host guard, runFill(), safeRuntimeCall; also patches background.js to inject tabId into DO_FILL
+- [ ] 06-02-PLAN.md — utils/overlay.js Shadow DOM IIFE: _container pattern, showButton (draggable, position-saved), showResults (colour-coded rows, needs_review clickable), showBanner, dismiss (observer disconnect), setObserverRef
 
 **UAT Criteria:** Open a Greenhouse job application. Verify "✨ Fill Form" button appears bottom-right. Verify clicking it sends fill trigger. Verify overlay renders after fill with results.
 
