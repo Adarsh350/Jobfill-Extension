@@ -22,17 +22,17 @@ const {
 
 // --- levenshtein ---
 describe('levenshtein', () => {
-  it('returns 0 for identical strings', { todo: 'implement matcher.js first' }, () => {
+  it('returns 0 for identical strings', () => {
     assert.equal(levenshtein('abc', 'abc'), 0);
   });
-  it('returns string length when other string is empty', { todo: 'implement matcher.js first' }, () => {
+  it('returns string length when other string is empty', () => {
     assert.equal(levenshtein('', 'abc'), 3);
     assert.equal(levenshtein('abc', ''), 3);
   });
-  it('edit distance US vs UAE is 2', { todo: 'implement matcher.js first' }, () => {
+  it('edit distance US vs UAE is 2', () => {
     assert.equal(levenshtein('us', 'uae'), 2);
   });
-  it('single substitution returns 1', { todo: 'implement matcher.js first' }, () => {
+  it('single substitution returns 1', () => {
     assert.equal(levenshtein('cat', 'bat'), 1);
   });
 });
@@ -45,29 +45,29 @@ describe('matchDropdownOption', () => {
     { value: 'uk', text: 'United Kingdom' },
   ];
 
-  it('tier 1: exact text match', { todo: 'implement matcher.js first' }, () => {
+  it('tier 1: exact text match', () => {
     assert.equal(matchDropdownOption(opts, 'United States').text, 'United States');
   });
-  it('tier 2: alias UAE → United Arab Emirates', { todo: 'implement matcher.js first' }, () => {
+  it('tier 2: alias UAE → United Arab Emirates', () => {
     assert.equal(matchDropdownOption(opts, 'UAE').text, 'United Arab Emirates');
   });
-  it('tier 2: alias US → United States (not UAE)', { todo: 'implement matcher.js first' }, () => {
+  it('tier 2: alias US → United States (not UAE)', () => {
     assert.equal(matchDropdownOption(opts, 'US').text, 'United States');
   });
-  it('tier 2: alias UK → United Kingdom', { todo: 'implement matcher.js first' }, () => {
+  it('tier 2: alias UK → United Kingdom', () => {
     assert.equal(matchDropdownOption(opts, 'UK').text, 'United Kingdom');
   });
-  it('tier 3: case-insensitive includes match', { todo: 'implement matcher.js first' }, () => {
+  it('tier 3: case-insensitive includes match', () => {
     assert.equal(matchDropdownOption(opts, 'united states').text, 'United States');
   });
-  it('tier 4: levenshtein ≤ 3 match', { todo: 'implement matcher.js first' }, () => {
+  it('tier 4: levenshtein ≤ 3 match', () => {
     // "Untied States" — 2 transpositions
     assert.equal(matchDropdownOption(opts, 'Untied States').text, 'United States');
   });
-  it('returns null when no match within distance 3', { todo: 'implement matcher.js first' }, () => {
+  it('returns null when no match within distance 3', () => {
     assert.equal(matchDropdownOption(opts, 'Zorgon'), null);
   });
-  it('does not mutate the options array', { todo: 'implement matcher.js first' }, () => {
+  it('does not mutate the options array', () => {
     const optsCopy = [...opts];
     matchDropdownOption(opts, 'UAE');
     assert.deepEqual(opts, optsCopy);
@@ -76,24 +76,24 @@ describe('matchDropdownOption', () => {
 
 // --- extractKeywords ---
 describe('extractKeywords', () => {
-  it('lowercases and strips punctuation', { todo: 'implement matcher.js first' }, () => {
+  it('lowercases and strips punctuation', () => {
     const kw = extractKeywords('Hello, World!');
     assert.ok(kw.includes('hello') || kw.includes('world'));
     assert.ok(!kw.some(w => w.includes(',')));
   });
-  it('removes common stop words', { todo: 'implement matcher.js first' }, () => {
+  it('removes common stop words', () => {
     const kw = extractKeywords('Why do you want to work here?');
     assert.ok(!kw.includes('why'));
     assert.ok(!kw.includes('do'));
     assert.ok(!kw.includes('you'));
     assert.ok(kw.includes('work'));
   });
-  it('returns array of strings with length > 1', { todo: 'implement matcher.js first' }, () => {
+  it('returns array of strings with length > 1', () => {
     const kw = extractKeywords('Tell us about your experience with CRM tools');
     assert.ok(Array.isArray(kw));
     assert.ok(kw.every(w => w.length > 1));
   });
-  it('returns empty array for all-stop-word input', { todo: 'implement matcher.js first' }, () => {
+  it('returns empty array for all-stop-word input', () => {
     const kw = extractKeywords('a an the');
     assert.deepEqual(kw, []);
   });
@@ -110,20 +110,20 @@ describe('scoreAnswerBankEntry', () => {
     variables: [],
   };
 
-  it('returns a number between 0 and 1', { todo: 'implement matcher.js first' }, () => {
+  it('returns a number between 0 and 1', () => {
     const score = scoreAnswerBankEntry('Why do you want to work here?', entry);
     assert.ok(typeof score === 'number');
     assert.ok(score >= 0 && score <= 1);
   });
-  it('high overlap question scores above 0.5', { todo: 'implement matcher.js first' }, () => {
+  it('high overlap question scores above 0.5', () => {
     const score = scoreAnswerBankEntry('Why do you want to work at our company?', entry);
     assert.ok(score > 0.5);
   });
-  it('unrelated question scores below 0.2', { todo: 'implement matcher.js first' }, () => {
+  it('unrelated question scores below 0.2', () => {
     const score = scoreAnswerBankEntry('What is your expected salary?', entry);
     assert.ok(score < 0.2);
   });
-  it('score never exceeds 1.0', { todo: 'implement matcher.js first' }, () => {
+  it('score never exceeds 1.0', () => {
     const score = scoreAnswerBankEntry(entry.question, entry);
     assert.ok(score <= 1.0);
   });
@@ -150,7 +150,7 @@ describe('findBestAnswer', () => {
     },
   ];
 
-  it('returns { entry, score } when best score ≥ 0.75', { todo: 'implement matcher.js first' }, () => {
+  it('returns { entry, score } when best score ≥ 0.75', () => {
     const result = findBestAnswer('Why do you want to work at our company? What motivates you?', bank);
     // result may be null if threshold not met — implementation must tune to ensure high-overlap passes
     if (result !== null) {
@@ -159,14 +159,14 @@ describe('findBestAnswer', () => {
       assert.ok(result.score >= 0.75);
     }
   });
-  it('returns null when best score < 0.75 (FR-3.7)', { todo: 'implement matcher.js first' }, () => {
+  it('returns null when best score < 0.75 (FR-3.7)', () => {
     const result = findBestAnswer('Tell me about a challenge you overcame', bank);
     assert.equal(result, null);
   });
-  it('returns null for empty answer bank', { todo: 'implement matcher.js first' }, () => {
+  it('returns null for empty answer bank', () => {
     assert.equal(findBestAnswer('Any question', []), null);
   });
-  it('picks the highest-scoring entry when multiple entries are above threshold', { todo: 'implement matcher.js first' }, () => {
+  it('picks the highest-scoring entry when multiple entries are above threshold', () => {
     const result = findBestAnswer('What salary compensation do you expect for this role?', bank);
     if (result !== null) {
       assert.equal(result.entry.id, '2');
@@ -176,31 +176,31 @@ describe('findBestAnswer', () => {
 
 // --- substituteVariables ---
 describe('substituteVariables', () => {
-  it('replaces a single known key', { todo: 'implement matcher.js first' }, () => {
+  it('replaces a single known key', () => {
     assert.equal(
       substituteVariables('Hello {{my_name}}', { my_name: 'Adarsh' }),
       'Hello Adarsh'
     );
   });
-  it('replaces multiple keys in one pass', { todo: 'implement matcher.js first' }, () => {
+  it('replaces multiple keys in one pass', () => {
     assert.equal(
       substituteVariables('{{my_name}} at {{company_name}}', { my_name: 'Adarsh', company_name: 'Acme' }),
       'Adarsh at Acme'
     );
   });
-  it('leaves unresolved {{tokens}} visible (FR-3.7)', { todo: 'implement matcher.js first' }, () => {
+  it('leaves unresolved {{tokens}} visible (FR-3.7)', () => {
     assert.equal(
       substituteVariables('I work at {{company_name}}', {}),
       'I work at {{company_name}}'
     );
   });
-  it('leaves partially-unresolved tokens visible while resolving others', { todo: 'implement matcher.js first' }, () => {
+  it('leaves partially-unresolved tokens visible while resolving others', () => {
     assert.equal(
       substituteVariables('{{my_name}} applies to {{company_name}}', { my_name: 'Adarsh' }),
       'Adarsh applies to {{company_name}}'
     );
   });
-  it('returns original string unchanged when variables map is empty', { todo: 'implement matcher.js first' }, () => {
+  it('returns original string unchanged when variables map is empty', () => {
     const original = 'No tokens here.';
     assert.equal(substituteVariables(original, {}), original);
   });
