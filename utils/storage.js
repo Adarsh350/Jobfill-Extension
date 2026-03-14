@@ -74,11 +74,57 @@ window.JobFill.storage = (function () {
     }
   }
 
+  // --- Fill Status (chrome.storage.session, key: "lastFillStatus") ---
+
+  /**
+   * NOTE: Requires Phase 3 (background.js) to call
+   * chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' })
+   * before this function works from content scripts.
+   */
+  async function getFillStatus(tabId) {
+    const r = await chrome.storage.session.get('lastFillStatus');
+    const s = r.lastFillStatus || null;
+    return (s && s.tabId === tabId) ? s : null;
+  }
+
+  async function saveFillStatus(tabId, results) {
+    try {
+      await chrome.storage.session.set({
+        lastFillStatus: {
+          tabId,
+          timestamp: new Date().toISOString(),
+          results,
+        }
+      });
+    } catch (err) {
+      console.error('[JobFill] saveFillStatus error:', err.message);
+      throw err;
+    }
+  }
+
+  // --- Quota Monitoring ---
+  // Uses callback form — getBytesInUse lacks a reliable Promise API in all Chrome versions.
+
+  function getBytesInUse(key) {
+    return new Promise((resolve) => {
+      chrome.storage.sync.getBytesInUse(key, (bytes) => {
+        resolve({
+          used: bytes,
+          limit: 8192,
+          percentFull: Math.round((bytes / 8192) * 100),
+          nearLimit: bytes > 6144,
+        });
+      });
+    });
+  }
+
   return {
     getProfile, saveProfile,
     getAnswerBank, saveAnswerBank,
     getResume, saveResume, clearResume,
     getSettings, saveSettings,
+    getFillStatus, saveFillStatus,
+    getBytesInUse,
   };
 
 })();
