@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-14T22:42:42.947Z"
+last_updated: "2026-03-14T23:30:00.000Z"
 progress:
   total_phases: 12
   completed_phases: 4
-  total_plans: 8
-  completed_plans: 7
+  total_plans: 10
+  completed_plans: 9
 ---
 
 # Project State
@@ -21,9 +21,9 @@ progress:
 
 ## Current Status
 
-**Phase:** 04-react-angular-event-dispatch-and-form-fill-primitives (in progress — Plans 01-03 complete)
-**Active Phase:** Phase 4 complete — all 3 plans done
-**Next Action:** Phase 5 — Fuzzy Matcher & Answer Bank Engine
+**Phase:** 05-fuzzy-matcher-and-answer-bank-engine (in progress — Plans 01-02 complete)
+**Active Phase:** Phase 5 Plan 02 complete — utils/matcher.js implemented, 29/29 tests pass
+**Next Action:** Phase 5 Plan 03 (if exists) or Phase 6 — Content Script Coordinator & Fill Overlay
 
 ---
 
@@ -52,7 +52,7 @@ progress:
 | 2 | Chrome Storage Utility Layer | ✅ Complete (UAT passed 2026-03-14) |
 | 3 | Background Service Worker | ✅ Complete (2026-03-14) |
 | 4 | React/Angular Event Dispatch & Fill Primitives | ✅ Complete (2026-03-14) |
-| 5 | Fuzzy Matcher & Answer Bank Engine | ⬜ Not started |
+| 5 | Fuzzy Matcher & Answer Bank Engine | 🔄 In Progress (Plans 01-02 complete) |
 | 6 | Content Script Coordinator & Fill Overlay | ⬜ Not started |
 | 7 | Greenhouse & Lever Platform Modules | ⬜ Not started |
 | 8 | Workday & Ashby Platform Modules | ⬜ Not started |
@@ -84,6 +84,10 @@ progress:
 ---
 - [Phase 05-01]: ESM import with createRequire + try/catch fallback allows test file to run before utils/matcher.js exists
 - [Phase 05-01]: todo stubs (not skip) keep CI green and requirement coverage visible per Phase 4-01 precedent
+- [Phase 05-02]: Top-level function declarations used (not IIFE) — avoids levenshtein scoping conflict with module.exports shim outside IIFE closure
+- [Phase 05-02]: ALIAS_MAP lookup is exact on targetLower — prevents 'us' fuzzy-matching to 'uae'
+- [Phase 05-02]: substituteVariables returns match (not '') for unknown keys — keeps {{token}} visible per FR-3.7
+- [Phase 05-02]: findBestAnswer threshold 0.75 — returns null below, consistent with FR-3.7 confidence gate
 
 ## Session Log
 
@@ -96,6 +100,7 @@ progress:
 - **2026-03-14:** Phase 4 Plan 01 execution: Wave 0 TDD scaffold complete. tests/helpers/dom-mock.js (Node DOM shim, native setter spy), tests/unit/events.test.js (9 todo stubs), tests/unit/filler.test.js (6 todo stubs), tests/run-all.js. All 14 TEST: anchors present. node --test exits 0.
 - **2026-03-14:** Phase 4 Plan 02 execution: utils/events.js implemented (7 functions, IIFE pattern, native setter). All 9 events.test.js tests pass (0 fail, 0 todo). Commit c07b961.
 - **2026-03-14:** Phase 4 Plan 03 execution: utils/filler.js implemented (7 functions, IIFE pattern, fill lock, shadowQuery, waitForElement). All 6 filler.test.js tests pass. Full suite 14/14. Commit a8d10d9. Phase 4 complete.
+- **2026-03-14:** Phase 5 Plan 02 execution: utils/matcher.js implemented (6 exported functions, top-level declarations, dual browser/CJS shim). All 29 matcher.test.js tests pass (0 fail, 0 todo). Commit 341fe19.
 
 ---
 
