@@ -80,7 +80,7 @@ Plans:
 
 **Goal:** `utils/events.js` and `utils/filler.js` implement the correct patterns for filling inputs on React/Angular/vanilla forms.
 
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 
 Plans:
 - [x] 04-01-PLAN.md — Wave 0: test infrastructure — dom-mock.js shim + events.test.js + filler.test.js stubs (14 TEST: anchors, all todo) — Complete 2026-03-14
@@ -95,15 +95,11 @@ Plans:
 
 **Goal:** `utils/matcher.js` implements the complete offline keyword + fuzzy matching system for answer bank lookups and dropdown value matching.
 
-**Plans:**
-1. `window.JobFill.matcher` namespace with Levenshtein distance function (single-row optimized, ~20 lines)
-2. Country/value alias map: `{ "UAE": "United Arab Emirates", "US": "United States", "UK": "United Kingdom", "US Citizen": "United States Citizen", ... }` (15–20 key entries for Gulf/MENA context)
-3. `matchDropdownOption(options, targetValue)` — exact → alias → case-insensitive includes → Levenshtein ≤ 3 → null
-4. `scoreAnswerBankEntry(question, entry)` — returns 0–1 score based on keyword overlap (Jaccard) + category alignment
-5. `findBestAnswer(questionText, answerBank)` — returns `{ entry, score }` or null if best score < 0.75
-6. `substituteVariables(answerText, variables)` — replaces `{{key}}` placeholders with values from a variables map
-7. `extractKeywords(text)` — lowercase, strip punctuation, remove stop words, return array
-8. Unit-testable: each function is pure (no side effects, no storage reads)
+**Plans:** 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Wave 0: create tests/unit/matcher.test.js with todo stubs for all 7 functions
+- [ ] 05-02-PLAN.md — Implement utils/matcher.js TDD: all 7 function groups passing (levenshtein, matchDropdownOption, extractKeywords, scoreAnswerBankEntry, findBestAnswer, substituteVariables)
 
 **UAT Criteria:** Open DevTools console on any page with content script loaded. Test `window.JobFill.matcher.matchDropdownOption([{text:'United Arab Emirates',value:'UAE'}], 'UAE')` returns the option. Test `window.JobFill.matcher.findBestAnswer("Why do you want to work here?", answerBankSample)` returns expected result.
 
