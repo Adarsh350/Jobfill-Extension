@@ -83,7 +83,7 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Wave 0: test infrastructure — dom-mock.js shim + events.test.js + filler.test.js stubs (14 TEST: anchors, all todo)
+- [x] 04-01-PLAN.md — Wave 0: test infrastructure — dom-mock.js shim + events.test.js + filler.test.js stubs (14 TEST: anchors, all todo) — Complete 2026-03-14
 - [ ] 04-02-PLAN.md — Implement utils/events.js: fillInput (native prototype setter), fillSelect, fillCheckbox, fillRadio, fillTextarea, dispatchInputChange, dispatchBlur — 8 tests green
 - [ ] 04-03-PLAN.md — Implement utils/filler.js: fillField dispatcher, waitForElement (MutationObserver, 3000ms), shadowQuery/shadowQueryAll, fill lock (isFilling/startFill/endFill) — 6 tests green
 
