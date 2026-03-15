@@ -75,6 +75,20 @@ let _currentDom = null;
 // Track whether modal is present in the simulated DOM
 let _modalPresent = true;
 
+// Minimal MutationObserver mock
+class MockMutationObserver {
+  constructor(cb) {
+    this._cb = cb;
+    this._observations = [];
+  }
+  observe(target, options) {
+    this._observations.push({ target, options });
+  }
+  disconnect() {}
+}
+
+global.MutationObserver = MockMutationObserver;
+
 global.document = {
   querySelector: function (sel) {
     if (!_currentDom) return null;
@@ -85,23 +99,36 @@ global.document = {
       return _modalPresent ? { tagName: 'DIV', className: 'jobs-easy-apply-modal' } : null;
     }
 
-    // Fields inside modal (scoped by id)
-    if (sel === '#firstName'                 || sel === 'input#firstName')                 return els.firstName;
-    if (sel === '#lastName'                  || sel === 'input#lastName')                  return els.lastName;
-    if (sel === '#email-address'             || sel === 'input#email-address')             return els.email;
-    if (sel === '#phoneNumber-nationalNumber' || sel === 'input#phoneNumber-nationalNumber') return els.phone;
+    // Modal-scoped selectors (strip the modal prefix for resolution)
+    const MODAL_PREFIX = '.jobs-easy-apply-modal ';
+    let effectiveSel = sel;
+    if (sel.startsWith(MODAL_PREFIX)) {
+      effectiveSel = sel.slice(MODAL_PREFIX.length);
+    }
+
+    // id-contains selectors
+    if (effectiveSel === 'input[id*="phoneNumber"]') return els.phone;
+    if (effectiveSel === 'input[id*="email"]') return els.email;
+    if (effectiveSel === 'input[id*="firstName"]') return els.firstName;
+    if (effectiveSel === 'input[id*="lastName"]') return els.lastName;
 
     // Autocomplete
-    if (sel === 'input[autocomplete="given-name"]')  return els.firstName;
-    if (sel === 'input[autocomplete="family-name"]') return els.lastName;
+    if (effectiveSel === 'input[autocomplete="given-name"]')  return els.firstName;
+    if (effectiveSel === 'input[autocomplete="family-name"]') return els.lastName;
 
     // Type selectors
-    if (sel === 'input[type="email"]') return els.email;
-    if (sel === 'input[type="tel"]')   return els.phone;
+    if (effectiveSel === 'input[type="email"]') return els.email;
+    if (effectiveSel === 'input[type="tel"]')   return els.phone;
+
+    // Exact id selectors
+    if (effectiveSel === '#firstName'                 || effectiveSel === 'input#firstName')                 return els.firstName;
+    if (effectiveSel === '#lastName'                  || effectiveSel === 'input#lastName')                  return els.lastName;
+    if (effectiveSel === '#email-address'             || effectiveSel === 'input#email-address')             return els.email;
+    if (effectiveSel === '#phoneNumber-nationalNumber' || effectiveSel === 'input#phoneNumber-nationalNumber') return els.phone;
 
     // Buttons
-    if (sel === 'button[aria-label="Submit application"]') return els.btnSubmit;
-    if (sel === 'button[aria-label="Continue to next step"]') return els.btnNext;
+    if (effectiveSel === 'button[aria-label="Submit application"]') return els.btnSubmit;
+    if (effectiveSel === 'button[aria-label="Continue to next step"]') return els.btnNext;
 
     return null;
   },
@@ -168,25 +195,83 @@ describe('linkedin', () => {
     return window.JobFill.platforms && window.JobFill.platforms.linkedin;
   }
 
-  test('TEST: matches() returns true for linkedin.com hostname',
-    { todo: 'implement platforms/linkedin.js' }, () => {});
+  test('TEST: matches() returns true for linkedin.com hostname', () => {
+    const mod = li();
+    assert.ok(mod, 'linkedin platform module must be registered');
+    assert.strictEqual(mod.matches('www.linkedin.com'), true);
+    assert.strictEqual(mod.matches('linkedin.com'), true);
+    assert.strictEqual(mod.matches('greenhouse.io'), false);
+  });
 
-  test('TEST: fill() returns empty array when .jobs-easy-apply-modal not present',
-    { todo: 'implement platforms/linkedin.js' }, () => {});
+  test('TEST: fill() returns empty array when .jobs-easy-apply-modal not present', async () => {
+    const mod = li();
+    assert.ok(mod, 'linkedin platform module must be registered');
+    _modalPresent = false;
+    const profile = { phone: '555-1234', email: 'a@b.com', firstName: 'Ada', lastName: 'Lovelace' };
+    const results = await mod.fill(profile, []);
+    assert.ok(Array.isArray(results), 'fill() must return an array');
+    assert.strictEqual(results.length, 0, 'fill() must return empty array when modal absent');
+  });
 
-  test('TEST: fill() fills phone field inside modal',
-    { todo: 'implement platforms/linkedin.js' }, () => {});
+  test('TEST: fill() fills phone field inside modal', async () => {
+    const mod = li();
+    assert.ok(mod, 'linkedin platform module must be registered');
+    const profile = { phone: '555-1234', email: 'a@b.com', firstName: 'Ada', lastName: 'Lovelace' };
+    const results = await mod.fill(profile, []);
+    const phoneResult = results.find(r => r.field === 'Phone');
+    assert.ok(phoneResult, 'Phone result must be present');
+    assert.strictEqual(phoneResult.status, 'filled');
+  });
 
-  test('TEST: fill() fills firstName and lastName inside modal',
-    { todo: 'implement platforms/linkedin.js' }, () => {});
+  test('TEST: fill() fills firstName and lastName inside modal', async () => {
+    const mod = li();
+    assert.ok(mod, 'linkedin platform module must be registered');
+    const profile = { phone: '555-1234', email: 'a@b.com', firstName: 'Ada', lastName: 'Lovelace' };
+    const results = await mod.fill(profile, []);
+    const firstNameResult = results.find(r => r.field === 'First Name');
+    const lastNameResult  = results.find(r => r.field === 'Last Name');
+    assert.ok(firstNameResult, 'First Name result must be present');
+    assert.ok(lastNameResult,  'Last Name result must be present');
+    assert.strictEqual(firstNameResult.status, 'filled');
+    assert.strictEqual(lastNameResult.status,  'filled');
+  });
 
-  test('TEST: fill() does not click Submit or Next buttons',
-    { todo: 'implement platforms/linkedin.js' }, () => {});
+  test('TEST: fill() does not click Submit or Next buttons', async () => {
+    const mod = li();
+    assert.ok(mod, 'linkedin platform module must be registered');
+    const { els } = _currentDom;
+    // Reset click tracking
+    els.btnSubmit._clicked = false;
+    els.btnNext._clicked   = false;
+    const profile = { phone: '555-1234', email: 'a@b.com', firstName: 'Ada', lastName: 'Lovelace' };
+    await mod.fill(profile, []);
+    assert.strictEqual(els.btnSubmit._clicked, false, 'Submit button must NOT be clicked');
+    assert.strictEqual(els.btnNext._clicked,   false, 'Next button must NOT be clicked');
+  });
 
-  test('TEST: fill() sets window._jobfillLinkedInObserver on modal',
-    { todo: 'implement platforms/linkedin.js' }, () => {});
+  test('TEST: fill() sets window._jobfillLinkedInObserver on modal', async () => {
+    const mod = li();
+    assert.ok(mod, 'linkedin platform module must be registered');
+    const profile = { phone: '555-1234', email: 'a@b.com', firstName: 'Ada', lastName: 'Lovelace' };
+    await mod.fill(profile, []);
+    assert.ok(window._jobfillLinkedInObserver, '_jobfillLinkedInObserver must be set after fill()');
+    assert.ok(
+      window._jobfillLinkedInObserver instanceof MockMutationObserver,
+      '_jobfillLinkedInObserver must be a MutationObserver instance'
+    );
+  });
 
-  test('TEST: fill() skips fields that already have a value',
-    { todo: 'implement platforms/linkedin.js' }, () => {});
+  test('TEST: fill() skips fields that already have a value', async () => {
+    const mod = li();
+    assert.ok(mod, 'linkedin platform module must be registered');
+    // Pre-fill the phone field
+    _currentDom.els.phone._value = '999-existing';
+    const profile = { phone: '555-1234', email: 'a@b.com', firstName: 'Ada', lastName: 'Lovelace' };
+    const results = await mod.fill(profile, []);
+    const phoneResult = results.find(r => r.field === 'Phone');
+    assert.ok(phoneResult, 'Phone result must be present');
+    assert.strictEqual(phoneResult.status, 'skipped');
+    assert.ok(phoneResult.reason && phoneResult.reason.includes('already has value'));
+  });
 
 });
