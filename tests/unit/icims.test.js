@@ -91,6 +91,7 @@ global.document = {
     if (sel === 'input[name="lastname"]'  || sel === 'input[name="lastName"]')  return els.lastname;
     if (sel === 'input[name="email"]')    return els.email;
     if (sel === 'input[name="phone"]')    return els.phone;
+    if (sel === 'input[name="phoneNumber"]') return els.phone;
     if (sel === 'input[name="resume"]')   return els.resume;
 
     // Type selectors
@@ -103,8 +104,12 @@ global.document = {
     if (sel === 'input[autocomplete="family-name"]') return els.lastname;
 
     // iCIMS-specific
-    if (sel === '.iCIMS_JobTitle' || sel === 'div.iCIMS_JobTitle') return _jobTitleEl;
+    if (sel === '.iCIMS_JobTitle, h1.iCIMS_Header' || sel === '.iCIMS_JobTitle' || sel === 'div.iCIMS_JobTitle') return _jobTitleEl;
     if (sel === '#iCIMS_MainContent' || sel === 'form#iCIMS_MainContent') return { tagName: 'FORM', id: 'iCIMS_MainContent' };
+
+    // id*= selectors (case-sensitive contains)
+    if (sel === 'input[id*="FirstName"]') return els.firstname;
+    if (sel === 'input[id*="LastName"]')  return els.lastname;
 
     return null;
   },
@@ -114,6 +119,9 @@ global.document = {
     const { els } = _currentDom;
     if (sel === 'input, textarea, select') {
       return [els.firstname, els.lastname, els.email, els.phone, els.resume];
+    }
+    if (sel === 'textarea, input[type="text"]') {
+      return [els.firstname];
     }
     return [];
   },
@@ -160,31 +168,109 @@ describe('icims', () => {
     _currentDom = buildDom();
     window.JobFill.matcher.findBestAnswer    = function () { return null; };
     window.JobFill.matcher.substituteVariables = function (s) { return s; };
+    // Reset window.top to normal (same-origin) by default
+    if (Object.getOwnPropertyDescriptor(window, 'top') &&
+        Object.getOwnPropertyDescriptor(window, 'top').get) {
+      delete window.top;
+    }
+    // chrome stub
+    global.chrome = { runtime: { sendMessage: function () {} } };
   });
 
   function icims() {
     return window.JobFill.platforms && window.JobFill.platforms.icims;
   }
 
-  test('TEST: matches() returns true for icims.com hostname',
-    { todo: 'implement platforms/icims.js' }, () => {});
+  test('TEST: matches() returns true for icims.com hostname', () => {
+    const mod = icims();
+    assert.ok(mod, 'platforms/icims.js must be loaded');
+    assert.strictEqual(mod.matches('icims.com'), true);
+  });
 
-  test('TEST: matches() returns true for careers.icims.com hostname',
-    { todo: 'implement platforms/icims.js' }, () => {});
+  test('TEST: matches() returns true for careers.icims.com hostname', () => {
+    const mod = icims();
+    assert.ok(mod, 'platforms/icims.js must be loaded');
+    assert.strictEqual(mod.matches('careers.icims.com'), true);
+  });
 
-  test('TEST: matches() returns false for non-iCIMS hostname',
-    { todo: 'implement platforms/icims.js' }, () => {});
+  test('TEST: matches() returns false for non-iCIMS hostname', () => {
+    const mod = icims();
+    assert.ok(mod, 'platforms/icims.js must be loaded');
+    assert.strictEqual(mod.matches('greenhouse.io'), false);
+  });
 
-  test('TEST: fill() returns results array with filled status for standard fields',
-    { todo: 'implement platforms/icims.js' }, () => {});
+  test('TEST: fill() returns results array with filled status for standard fields', async () => {
+    const mod = icims();
+    assert.ok(mod, 'platforms/icims.js must be loaded');
 
-  test('TEST: fill() skips fields that already have a value',
-    { todo: 'implement platforms/icims.js' }, () => {});
+    const profile = { firstName: 'Jane', lastName: 'Doe', email: 'jane@doe.com', phone: '5551234' };
+    const results = await mod.fill(profile, []);
 
-  test('TEST: fill() detects cross-origin iframe and returns failed result',
-    { todo: 'implement platforms/icims.js' }, () => {});
+    assert.ok(Array.isArray(results), 'fill() must return an array');
+    const firstNameResult = results.find(r => r.field === 'First Name');
+    assert.ok(firstNameResult, 'results must include First Name');
+    assert.strictEqual(firstNameResult.status, 'filled');
+  });
 
-  test('TEST: getJobDetails() parses job title from iCIMS_JobTitle element',
-    { todo: 'implement platforms/icims.js' }, () => {});
+  test('TEST: fill() skips fields that already have a value', async () => {
+    const mod = icims();
+    assert.ok(mod, 'platforms/icims.js must be loaded');
+
+    // Pre-fill the firstname element
+    _currentDom.els.firstname._value = 'AlreadyFilled';
+
+    const profile = { firstName: 'Jane', lastName: 'Doe', email: 'jane@doe.com', phone: '5551234' };
+    const results = await mod.fill(profile, []);
+
+    assert.ok(Array.isArray(results), 'fill() must return an array');
+    const firstNameResult = results.find(r => r.field === 'First Name');
+    assert.ok(firstNameResult, 'results must include First Name');
+    assert.strictEqual(firstNameResult.status, 'skipped');
+    assert.strictEqual(firstNameResult.reason, 'already has value');
+  });
+
+  test('TEST: fill() detects cross-origin iframe and returns failed result', async () => {
+    const mod = icims();
+    assert.ok(mod, 'platforms/icims.js must be loaded');
+
+    // Simulate being inside a cross-origin iframe:
+    // window !== window.top AND window.top.location throws SecurityError
+    const fakeTop = {};
+    Object.defineProperty(fakeTop, 'location', {
+      get: function () {
+        const err = new Error('Blocked a frame with origin');
+        err.name = 'SecurityError';
+        throw err;
+      },
+    });
+    Object.defineProperty(window, 'top', {
+      get: function () { return fakeTop; },
+      configurable: true,
+    });
+
+    const profile = { firstName: 'Jane' };
+    const results = await mod.fill(profile, []);
+
+    // Restore window.top
+    delete window.top;
+
+    assert.ok(Array.isArray(results), 'fill() must return an array');
+    assert.ok(results.length > 0, 'must have at least one result');
+    assert.strictEqual(results[0].status, 'failed');
+    assert.ok(
+      results[0].reason && results[0].reason.indexOf('cross-origin') !== -1,
+      'reason must mention cross-origin'
+    );
+  });
+
+  test('TEST: getJobDetails() parses job title from iCIMS_JobTitle element', () => {
+    const mod = icims();
+    assert.ok(mod, 'platforms/icims.js must be loaded');
+
+    _currentDom = buildDom();
+    const details = mod.getJobDetails();
+
+    assert.strictEqual(details.jobTitle, 'Senior Marketing Manager');
+  });
 
 });
