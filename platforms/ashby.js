@@ -241,6 +241,30 @@ window.JobFill.platforms.ashby = (function () {
     fillStandardFields(profile, results, handledEls);
     fillCustomQuestions(answerBank, jobDetails, results, handledEls);
 
+    // Pass: resume upload
+    var fileInput = window.JobFill.filler.findResumeFileInput(document);
+    if (fileInput) {
+      var uploadResult = await window.JobFill.filler.attachResume(fileInput);
+      if (uploadResult === null) {
+        var sel = window.JobFill.filler.getUniqueSelector(fileInput);
+        uploadResult = await new Promise(function(resolve) {
+          chrome.runtime.sendMessage({
+            type: 'RESUME_UPLOAD_FALLBACK',
+            tabId: window._jobfillTabId,
+            frameId: window._jobfillFrameId != null ? window._jobfillFrameId : 0,
+            selector: sel,
+          }, resolve);
+        });
+      }
+      if (uploadResult && (uploadResult.status === 'filled' || uploadResult.status === 'filled_via_main_world')) {
+        results.push({ field: 'Resume', status: 'filled' });
+      } else if (uploadResult && uploadResult.status === 'skipped') {
+        results.push({ field: 'Resume', status: 'skipped', reason: uploadResult.reason });
+      } else {
+        results.push({ field: 'Resume', status: 'failed', reason: (uploadResult && uploadResult.reason) || 'upload failed' });
+      }
+    }
+
     return results;
   }
 

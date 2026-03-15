@@ -208,6 +208,54 @@ window.JobFill.platforms.workday = (function () {
   async function fill(profile, answerBank) {
     var results = [];
     fillStandardFields(profile, results);
+
+    // Pass: resume upload — Workday: shadow DOM traversal required for file inputs
+    // Try findResumeFileInput first; shadow scan as fallback for shadow-root inputs
+    var fileInput = window.JobFill.filler.findResumeFileInput(document);
+    if (!fileInput) {
+      var fileInputs = window.JobFill.filler.shadowQueryAll(document, 'input[type="file"]');
+      if (fileInputs.length === 1) {
+        fileInput = fileInputs[0];
+      } else if (fileInputs.length > 1) {
+        // Score each shadow input; pick highest scored resume candidate
+        var best = null;
+        var bestScore = -1;
+        var resumeKws = ['resume', 'cv', 'curriculum'];
+        for (var fi = 0; fi < fileInputs.length; fi++) {
+          var inp = fileInputs[fi];
+          var combined = ((inp.name || '') + ' ' + (inp.id || '')).toLowerCase();
+          var score = 0;
+          for (var ki = 0; ki < resumeKws.length; ki++) {
+            if (combined.indexOf(resumeKws[ki]) !== -1) score += 1;
+          }
+          if (score > bestScore) { bestScore = score; best = inp; }
+        }
+        fileInput = best || fileInputs[0];
+      }
+    }
+
+    if (fileInput) {
+      var uploadResult = await window.JobFill.filler.attachResume(fileInput);
+      if (uploadResult === null) {
+        var sel = window.JobFill.filler.getUniqueSelector(fileInput);
+        uploadResult = await new Promise(function(resolve) {
+          chrome.runtime.sendMessage({
+            type: 'RESUME_UPLOAD_FALLBACK',
+            tabId: window._jobfillTabId,
+            frameId: window._jobfillFrameId != null ? window._jobfillFrameId : 0,
+            selector: sel,
+          }, resolve);
+        });
+      }
+      if (uploadResult && (uploadResult.status === 'filled' || uploadResult.status === 'filled_via_main_world')) {
+        results.push({ field: 'Resume', status: 'filled' });
+      } else if (uploadResult && uploadResult.status === 'skipped') {
+        results.push({ field: 'Resume', status: 'skipped', reason: uploadResult.reason });
+      } else {
+        results.push({ field: 'Resume', status: 'failed', reason: (uploadResult && uploadResult.reason) || 'upload failed' });
+      }
+    }
+
     return results;
   }
 
