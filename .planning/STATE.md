@@ -21,9 +21,9 @@ progress:
 
 ## Current Status
 
-**Phase:** 12-popup-ui — In Progress
-**Active Phase:** Phase 12 — Popup UI, Answer Bank & Templates
-**Next Action:** Execute Phase 12 Plan 03
+**Phase:** 12-popup-ui — Complete
+**Active Phase:** All phases complete — v1.0 milestone reached
+**Next Action:** Load extension in Chrome for end-to-end UAT
 
 ---
 
@@ -59,7 +59,7 @@ progress:
 | 9 | iCIMS, LinkedIn Easy Apply & Bayt Modules | Complete (verified 2026-03-15) |
 | 10 | Generic Fallback Module | Complete (2026-03-15) |
 | 11 | Resume Auto-Upload | Complete (verified 2026-03-15) |
-| 12 | Popup UI, Answer Bank & Templates | In Progress (Plan 01 complete) |
+| 12 | Popup UI, Answer Bank & Templates | Complete (2026-03-15) |
 
 ---
 
@@ -174,6 +174,7 @@ progress:
 - **2026-03-15:** Phase 12 Plan 02 execution complete. popup.js IIFE implemented (149 lines). initTabs (4-panel tab switching), initProfileTab (load 25 fields from storage on open), collectProfile (centralised field reader), 300ms debounced auto-save per field, updateProfileQuota (quota bar), initFillButton (TRIGGER_FILL + #header-status). Commit 2ab35ce.
 - **2026-03-15:** Phase 12 Plan 03 execution complete. resume-tab-fragment.js created (5 functions: formatBytes, showResumeInfo, clearResumeUI, loadResume, bindResumeTab). Fragment approach used to avoid popup.js write conflict with parallel plan 12-02. Auto-fixed: 5 MB size guard (Rule 2 — plan spec mentioned guard but omitted from template). Plan 12-04 will merge. Commit fd3c803.
 - **2026-03-15:** Phase 12 Plan 05 execution complete. settings-fragment.js created (6 functions: loadSettings, bindSettings, downloadJSON, showImportStatus, initExport, initImport + final DOMContentLoaded). Fragment approach used to avoid popup.js conflict with parallel plan 12-04. Awaiting 12-04 merge + checkpoint:human-verify UAT. Commit c2a23ba.
+- **2026-03-15:** Phase 12 final merge complete. settings-fragment.js merged into popup.js (436 lines). initProfileTab split into loadProfile + bindProfileAutoSave. showImportStatus renamed showToast. initExport/initImport renamed initExportButton/initImportButton. Single DOMContentLoaded, single IIFE, zero inline event attributes, node --check passes. Commit 57db6f7. Phase 12 complete. v1.0 milestone reached.
 
 ---
 
