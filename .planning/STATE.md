@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-14T23:30:00.000Z"
+last_updated: "2026-03-15T00:00:00.000Z"
 progress:
   total_phases: 12
-  completed_phases: 4
-  total_plans: 10
+  completed_phases: 5
+  total_plans: 9
   completed_plans: 9
 ---
 
@@ -21,9 +21,9 @@ progress:
 
 ## Current Status
 
-**Phase:** 05-fuzzy-matcher-and-answer-bank-engine (in progress — Plans 01-02 complete)
-**Active Phase:** Phase 5 Plan 02 complete — utils/matcher.js implemented, 29/29 tests pass
-**Next Action:** Phase 5 Plan 03 (if exists) or Phase 6 — Content Script Coordinator & Fill Overlay
+**Phase:** 06-fill-status-overlay (in progress — Plan 02 complete)
+**Active Phase:** Phase 6 Plan 02 complete — utils/overlay.js implemented, all 18 checks pass
+**Next Action:** Phase 6 Plan 03 (content.js coordinator) or remaining Phase 6 plans
 
 ---
 
@@ -53,7 +53,7 @@ progress:
 | 3 | Background Service Worker | ✅ Complete (2026-03-14) |
 | 4 | React/Angular Event Dispatch & Fill Primitives | ✅ Complete (2026-03-14) |
 | 5 | Fuzzy Matcher & Answer Bank Engine | 🔄 In Progress (Plans 01-02 complete) |
-| 6 | Content Script Coordinator & Fill Overlay | ⬜ Not started |
+| 6 | Content Script Coordinator & Fill Overlay | 🔄 In Progress (Plan 02 complete) |
 | 7 | Greenhouse & Lever Platform Modules | ⬜ Not started |
 | 8 | Workday & Ashby Platform Modules | ⬜ Not started |
 | 9 | iCIMS, LinkedIn Easy Apply & Bayt Modules | ⬜ Not started |
@@ -88,6 +88,10 @@ progress:
 - [Phase 05-02]: ALIAS_MAP lookup is exact on targetLower — prevents 'us' fuzzy-matching to 'uae'
 - [Phase 05-02]: substituteVariables returns match (not '') for unknown keys — keeps {{token}} visible per FR-3.7
 - [Phase 05-02]: findBestAnswer threshold 0.75 — returns null below, consistent with FR-3.7 confidence gate
+- [Phase 06-02]: _container div pattern used — style tag appended directly to _shadow, only _container.innerHTML cleared, preserving injected CSS across all overlay calls
+- [Phase 06-02]: showButton guards against re-render if results panel already visible — prevents double-mount on rapid content.js calls
+- [Phase 06-02]: chrome.runtime.sendMessage wrapped in try/catch — context invalidation expected on tab navigation (NFR-4.4)
+- [Phase 06-02]: dismiss() calls _obs.disconnect() before nulling _host — prevents orphaned MutationObserver leak
 
 ## Session Log
 
@@ -101,6 +105,7 @@ progress:
 - **2026-03-14:** Phase 4 Plan 02 execution: utils/events.js implemented (7 functions, IIFE pattern, native setter). All 9 events.test.js tests pass (0 fail, 0 todo). Commit c07b961.
 - **2026-03-14:** Phase 4 Plan 03 execution: utils/filler.js implemented (7 functions, IIFE pattern, fill lock, shadowQuery, waitForElement). All 6 filler.test.js tests pass. Full suite 14/14. Commit a8d10d9. Phase 4 complete.
 - **2026-03-14:** Phase 5 Plan 02 execution: utils/matcher.js implemented (6 exported functions, top-level declarations, dual browser/CJS shim). All 29 matcher.test.js tests pass (0 fail, 0 todo). Commit 341fe19.
+- **2026-03-15:** Phase 6 Plan 02 execution: utils/overlay.js implemented (265 lines, Shadow DOM IIFE). showButton, showResults, showBanner, dismiss, setObserverRef. All 18 plan checks pass. Commit cb1ab11.
 
 ---
 
