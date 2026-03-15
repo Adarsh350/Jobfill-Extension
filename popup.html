@@ -1,13 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>JobFill</title>
     <link rel="stylesheet" href="popup.css">
+    <script src="utils/storage.js" defer></script>
+    <script src="popup.js" defer></script>
   </head>
   <body>
-    <p>JobFill popup — coming soon</p>
-    <script src="popup.js"></script>
+    <div id="app">
+
+      <!-- Header -->
+      <header class="popup-header">
+        <div class="header-left">
+          <span class="logo">JobFill</span>
+          <span id="header-status" class="header-status"></span>
+        </div>
+        <button id="btn-fill-form" class="btn-fill">Fill Form</button>
+      </header>
+
+      <!-- Tab Navigation -->
+      <nav class="tabs">
+        <button class="tab-btn active" data-tab="profile">Profile</button>
+        <button class="tab-btn" data-tab="resume">Resume</button>
+        <button class="tab-btn" data-tab="answers">Answer Bank</button>
+        <button class="tab-btn" data-tab="settings">Settings</button>
+      </nav>
+
+      <!-- Profile Tab -->
+      <div id="tab-profile" class="tab-panel active">
+        <h2>Profile</h2>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="profile-firstName">First Name</label>
+            <input type="text" id="profile-firstName" name="firstName">
+          </div>
+          <div class="field-group">
+            <label for="profile-lastName">Last Name</label>
+            <input type="text" id="profile-lastName" name="lastName">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="profile-email">Email</label>
+            <input type="email" id="profile-email" name="email">
+          </div>
+          <div class="field-group">
+            <label for="profile-phone">Phone</label>
+            <input type="tel" id="profile-phone" name="phone">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="profile-currentTitle">Current Title</label>
+            <input type="text" id="profile-currentTitle" name="currentTitle">
+          </div>
+          <div class="field-group">
+            <label for="profile-currentCompany">Current Company</label>
+            <input type="text" id="profile-currentCompany" name="currentCompany">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="profile-yearsExperience">Years Experience</label>
+            <input type="number" id="profile-yearsExperience" name="yearsExperience" min="0" max="50">
+          </div>
+          <div class="field-group">
+            <label for="profile-noticePeriod">Notice Period</label>
+            <input type="text" id="profile-noticePeriod" name="noticePeriod">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="profile-city">City</label>
+            <input type="text" id="profile-city" name="city">
+          </div>
+          <div class="field-group">
+            <label for="profile-country">Country</label>
+            <input type="text" id="profile-country" name="country">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="profile-nationality">Nationality</label>
+            <input type="text" id="profile-nationality" name="nationality">
+          </div>
+          <div class="field-group">
+            <label for="profile-workAuthorization">Work Authorization</label>
+            <select id="profile-workAuthorization" name="workAuthorization">
+              <option value=""></option>
+              <option value="UAE Golden Visa">UAE Golden Visa</option>
+              <option value="Citizen">Citizen</option>
+              <option value="Permanent Resident">Permanent Resident</option>
+              <option value="Work Permit">Work Permit</option>
+              <option value="Requires Sponsorship">Requires Sponsorship</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="profile-salaryExpectation">Salary Expectation</label>
+            <input type="text" id="profile-salaryExpectation" name="salaryExpectation">
+          </div>
+          <div class="field-group">
+            <label for="profile-currency">Currency</label>
+            <select id="profile-currency" name="currency">
+              <option value="AED">AED</option>
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="profile-linkedinUrl">LinkedIn URL</label>
+          <input type="url" id="profile-linkedinUrl" name="linkedinUrl">
+        </div>
+
+        <div class="field-group">
+          <label for="profile-portfolioUrl">Portfolio URL</label>
+          <input type="url" id="profile-portfolioUrl" name="portfolioUrl">
+        </div>
+
+        <div class="field-group">
+          <label for="profile-githubUrl">GitHub URL</label>
+          <input type="url" id="profile-githubUrl" name="githubUrl">
+        </div>
+
+        <div class="field-group">
+          <label for="profile-websiteUrl">Website URL</label>
+          <input type="url" id="profile-websiteUrl" name="websiteUrl">
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="profile-university">University</label>
+            <input type="text" id="profile-university" name="university">
+          </div>
+          <div class="field-group">
+            <label for="profile-degree">Degree</label>
+            <input type="text" id="profile-degree" name="degree">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-group">
+            <label for="profile-graduationYear">Graduation Year</label>
+            <input type="number" id="profile-graduationYear" name="graduationYear" min="1980" max="2030">
+          </div>
+          <div class="field-group">
+            <label for="profile-remotePreference">Remote Preference</label>
+            <select id="profile-remotePreference" name="remotePreference">
+              <option value="Any">Any</option>
+              <option value="Remote">Remote</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="On-site">On-site</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="profile-skills">Skills</label>
+          <input type="text" id="profile-skills" name="skills" placeholder="comma-separated">
+        </div>
+
+        <div class="field-group">
+          <label for="profile-languages">Languages</label>
+          <input type="text" id="profile-languages" name="languages" placeholder="comma-separated">
+        </div>
+
+        <div class="field-group">
+          <label for="profile-summary">Summary</label>
+          <textarea id="profile-summary" name="summary" rows="4"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label for="profile-coverLetterDefault">Default Cover Letter</label>
+          <textarea id="profile-coverLetterDefault" name="coverLetterDefault" rows="6"></textarea>
+        </div>
+
+        <div class="quota-section">
+          <span>Storage</span>
+          <div class="quota-bar">
+            <div id="profile-quota-bar" class="quota-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resume Tab -->
+      <div id="tab-resume" class="tab-panel">
+        <h2>Resume</h2>
+        <div class="resume-section">
+          <label class="btn-secondary" for="resume-input">Choose File</label>
+          <input type="file" id="resume-input" accept=".pdf,.doc,.docx" style="display:none">
+          <div id="resume-info" class="resume-info" style="display:none">
+            <span id="resume-filename"></span>
+            <span id="resume-size" class="resume-size"></span>
+            <button id="resume-clear" class="btn-danger-sm">Remove</button>
+          </div>
+          <p id="resume-empty" class="text-muted">No resume stored.</p>
+        </div>
+      </div>
+
+      <!-- Answer Bank Tab -->
+      <div id="tab-answers" class="tab-panel">
+        <h2>Answer Bank</h2>
+        <div class="answers-toolbar">
+          <button id="btn-add-answer" class="btn-primary">+ Add Entry</button>
+          <div class="quota-bar">
+            <div id="answers-quota-bar" class="quota-fill"></div>
+          </div>
+        </div>
+        <ul id="answers-list" class="answers-list"></ul>
+        <p id="answers-empty" class="text-muted">No entries yet. Click + Add Entry to start.</p>
+      </div>
+
+      <!-- Settings Tab -->
+      <div id="tab-settings" class="tab-panel">
+        <h2>Settings</h2>
+        <div class="field-group field-toggle">
+          <label for="settings-autofill-enabled">Autofill Enabled</label>
+          <input type="checkbox" id="settings-autofill-enabled">
+        </div>
+        <h3>Data</h3>
+        <div class="settings-data-row">
+          <button id="btn-export" class="btn-secondary">Export JSON</button>
+          <label class="btn-secondary" for="import-input">Import JSON</label>
+          <input type="file" id="import-input" accept=".json" style="display:none">
+        </div>
+        <p id="import-status" class="import-status"></p>
+      </div>
+
+      <!-- Answer Bank Modal -->
+      <div id="answer-modal" class="modal-overlay" style="display:none">
+        <div class="modal-box">
+          <h3 id="modal-title">Add Entry</h3>
+          <input type="hidden" id="modal-entry-id">
+          <div class="field-group">
+            <label for="modal-question">Question</label>
+            <textarea id="modal-question" rows="2"></textarea>
+          </div>
+          <div class="field-group">
+            <label for="modal-keywords">Keywords</label>
+            <input type="text" id="modal-keywords" placeholder="comma-separated">
+          </div>
+          <div class="field-group">
+            <label for="modal-category">Category</label>
+            <select id="modal-category">
+              <option value="motivation">Motivation</option>
+              <option value="skills">Skills / Tools</option>
+              <option value="experience">Experience</option>
+              <option value="work_auth">Work Authorization</option>
+              <option value="availability">Availability</option>
+              <option value="salary">Salary</option>
+              <option value="general">General</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="modal-answer">Answer</label>
+            <textarea id="modal-answer" rows="5"></textarea>
+          </div>
+          <div class="modal-actions">
+            <button id="modal-save" class="btn-primary">Save</button>
+            <button id="modal-cancel" class="btn-secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /#app -->
   </body>
 </html>
