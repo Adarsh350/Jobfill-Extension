@@ -123,15 +123,12 @@ Plans:
 
 **Goal:** `platforms/greenhouse.js` and `platforms/lever.js` implement full field mapping, fill logic, and job detail extraction for both platforms.
 
-**Plans:**
-1. `platforms/greenhouse.js` — `matches`: `hostname.includes('greenhouse.io')`
-2. Greenhouse field selectors: `first_name`, `last_name`, `email`, `phone`, `resume` (file input), `cover_letter` (textarea), LinkedIn, location dropdowns, work auth radio/select, custom questions
-3. `getJobDetails()` for Greenhouse: extract company name from `<h1>` or page title, job title from `<h1.app-title>` or `<title>`
-4. `fill(profile, answerBank)`: iterate fields, call `window.JobFill.filler.fillField()` for each, collect results
-5. `platforms/lever.js` — `matches`: `hostname.includes('lever.co')`
-6. Lever field selectors (React SPA): `input[name="name"]`, `input[name="email"]`, `input[name="phone"]`, LinkedIn input, resume upload, cover letter, custom `[data-qa]` fields
-7. `getJobDetails()` for Lever: company from `<div.main-header-logo>` alt text or page title; job title from `<h2>` or `<title>`
-8. Full fallback selector chains for each field (primary + 2 fallbacks)
+**Plans:** 3 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Wave 1: DOM fixtures + test stubs — dom-greenhouse.html, dom-lever.html, greenhouse.test.js (10 todo stubs), lever.test.js (8 todo stubs)
+- [ ] 07-02-PLAN.md — Wave 2: platforms/greenhouse.js TDD — RED→GREEN, 10 tests pass (matches, fill, getJobDetails, skip-if-filled, fallback selectors, custom questions, needs_review)
+- [ ] 07-03-PLAN.md — Wave 2: platforms/lever.js TDD — RED→GREEN, 8 tests pass (matches, fill, getJobDetails, fullName field, data-qa custom questions, urls[LinkedIn] bracket selector)
 
 **UAT Criteria:** Load a real Greenhouse job application. Click Fill Form. Verify name, email, phone, LinkedIn populated correctly. Verify React state updated (not just DOM value). Verify overlay shows results. Repeat for Lever.
 
