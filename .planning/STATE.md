@@ -173,6 +173,7 @@ progress:
 - **2026-03-15:** Phase 12 Plan 01 execution complete. popup.html (4-tab shell, 27 profile fields, modal skeleton) and popup.css (indigo scheme, system fonts, no CDN) created. Zero CSP violations. Commit 4ef5b89.
 - **2026-03-15:** Phase 12 Plan 02 execution complete. popup.js IIFE implemented (149 lines). initTabs (4-panel tab switching), initProfileTab (load 25 fields from storage on open), collectProfile (centralised field reader), 300ms debounced auto-save per field, updateProfileQuota (quota bar), initFillButton (TRIGGER_FILL + #header-status). Commit 2ab35ce.
 - **2026-03-15:** Phase 12 Plan 03 execution complete. resume-tab-fragment.js created (5 functions: formatBytes, showResumeInfo, clearResumeUI, loadResume, bindResumeTab). Fragment approach used to avoid popup.js write conflict with parallel plan 12-02. Auto-fixed: 5 MB size guard (Rule 2 — plan spec mentioned guard but omitted from template). Plan 12-04 will merge. Commit fd3c803.
+- **2026-03-15:** Phase 12 Plan 05 execution complete. settings-fragment.js created (6 functions: loadSettings, bindSettings, downloadJSON, showImportStatus, initExport, initImport + final DOMContentLoaded). Fragment approach used to avoid popup.js conflict with parallel plan 12-04. Awaiting 12-04 merge + checkpoint:human-verify UAT. Commit c2a23ba.
 
 ---
 
