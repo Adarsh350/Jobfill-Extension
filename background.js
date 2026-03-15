@@ -21,7 +21,7 @@ function handleMessage(msg, sender, sendResponse) {
     case 'GET_STATUS':             getStatus(msg.tabId, sendResponse);           return true;
     case 'EXPORT_DATA':            exportData(sendResponse);                     return true;
     case 'IMPORT_DATA':            importData(msg.payload, sendResponse);        return true;
-    case 'RESUME_UPLOAD_FALLBACK': sendResponse({ error: 'Not yet implemented' }); return true;
+    case 'RESUME_UPLOAD_FALLBACK': handleResumeUploadFallback(msg, sender, sendResponse); return true;
   }
   // Unknown type — no response needed, do NOT return true
 }
@@ -121,4 +121,47 @@ function mergeAnswerBank(existing, incoming) {
   for (const e of existing) map[e.id] = e;
   for (const e of incoming) map[e.id] = e; // incoming wins on id collision
   return Object.values(map);
+}
+
+// Injected into page's MAIN world — must be self-contained, no closure over extension variables
+// Uses var (not const/let) for serialization safety across page JS engines
+function attachResumeInMainWorld(resumeData, selector) {
+  var el = document.querySelector(selector);
+  if (!el) return { status: 'failed', reason: 'element_not_found' };
+  var parts = resumeData.dataUrl.split(',');
+  var mime = parts[0].match(/:(.*?);/)[1];
+  var binary = atob(parts[1]);
+  var bytes = new Uint8Array(binary.length);
+  for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  var blob = new Blob([bytes], { type: mime });
+  var file = new File([blob], resumeData.name, { type: resumeData.mimeType });
+  var dt = new DataTransfer();
+  dt.items.add(file);
+  el.files = dt.files;
+  el.dispatchEvent(new Event('change', { bubbles: true }));
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+  return el.files.length > 0
+    ? { status: 'filled_via_main_world' }
+    : { status: 'failed', reason: 'files_not_accepted' };
+}
+
+async function handleResumeUploadFallback(msg, sender, sendResponse) {
+  try {
+    const r = await chrome.storage.local.get('resume');
+    const resumeData = r.resume;
+    if (!resumeData) {
+      sendResponse({ status: 'failed', reason: 'no_resume_stored' });
+      return;
+    }
+    const frameId = (msg.frameId != null) ? msg.frameId : 0;
+    const results = await chrome.scripting.executeScript({
+      target: { tabId: msg.tabId, frameIds: [frameId] },
+      world: 'MAIN',
+      func: attachResumeInMainWorld,
+      args: [resumeData, msg.selector],
+    });
+    sendResponse(results[0]?.result || { status: 'failed', reason: 'no_result' });
+  } catch (err) {
+    sendResponse({ status: 'failed', reason: err.message });
+  }
 }
