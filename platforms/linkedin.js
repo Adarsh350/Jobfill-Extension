@@ -186,8 +186,35 @@ window.JobFill.platforms.linkedin = (function () {
 
     await fillStandardFields(profile, results, handledEls);
 
+    // LinkedIn: resume upload is best-effort — not always present in Easy Apply modal
     var modal = document.querySelector('.jobs-easy-apply-modal');
-    if (modal) {
+    if (!modal) {
+      results.push({ field: 'Resume', status: 'skipped', reason: 'easy apply modal not found' });
+    } else {
+      var fileInput = window.JobFill.filler.findResumeFileInput(modal);
+      if (!fileInput) {
+        results.push({ field: 'Resume', status: 'skipped', reason: 'no resume file input in modal' });
+      } else {
+        var uploadResult = await window.JobFill.filler.attachResume(fileInput);
+        if (uploadResult === null) {
+          var sel = window.JobFill.filler.getUniqueSelector(fileInput);
+          uploadResult = await new Promise(function(resolve) {
+            chrome.runtime.sendMessage({
+              type: 'RESUME_UPLOAD_FALLBACK',
+              tabId: window._jobfillTabId,
+              frameId: window._jobfillFrameId != null ? window._jobfillFrameId : 0,
+              selector: sel,
+            }, resolve);
+          });
+        }
+        if (uploadResult && (uploadResult.status === 'filled' || uploadResult.status === 'filled_via_main_world')) {
+          results.push({ field: 'Resume', status: 'filled' });
+        } else if (uploadResult && uploadResult.status === 'skipped') {
+          results.push({ field: 'Resume', status: 'skipped', reason: uploadResult.reason });
+        } else {
+          results.push({ field: 'Resume', status: 'failed', reason: (uploadResult && uploadResult.reason) || 'upload failed' });
+        }
+      }
       var observer = new MutationObserver(function () {
         fillStandardFields(profile, [], new Set());
       });
