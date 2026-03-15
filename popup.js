@@ -1,6 +1,5 @@
 // JobFill — popup.js
-// Phase 12 Plan 02: Profile tab wiring, tab switching, Fill Form button
-// Phase 12 Plans 03–05 will append additional init functions below.
+// Phase 12: Complete popup implementation (plans 12-02 through 12-05 merged)
 
 (function () {
   'use strict';
@@ -27,6 +26,14 @@
       clearTimeout(timer);
       timer = setTimeout(function () { fn.apply(null, args); }, ms);
     };
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
   // --- Tab Switching ---
@@ -79,7 +86,7 @@
     }
   }
 
-  async function initProfileTab() {
+  async function loadProfile() {
     try {
       var profile = await window.JobFill.storage.getProfile() || {};
       PROFILE_FIELDS.forEach(function (key) {
@@ -95,8 +102,9 @@
     } catch (e) {
       // storage unavailable — fields remain empty
     }
+  }
 
-    // Auto-save each field on input with 300ms debounce
+  function bindProfileAutoSave() {
     PROFILE_FIELDS.forEach(function (key) {
       var el = document.getElementById('profile-' + key);
       if (!el) return;
@@ -278,14 +286,6 @@
 
   // --- Answer Bank Tab ---
 
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
   async function updateAnswersQuota() {
     const q = await window.JobFill.storage.getBytesInUse('answerBank');
     const bar = document.getElementById('answers-quota-bar');
@@ -418,18 +418,113 @@
     });
   }
 
+  // --- Settings Tab ---
+
+  async function loadSettings() {
+    const settings = await window.JobFill.storage.getSettings();
+    const toggle = document.getElementById('settings-autofill-enabled');
+    if (toggle) toggle.checked = settings.autofillEnabled !== false; // default true
+  }
+
+  function bindSettings() {
+    const toggle = document.getElementById('settings-autofill-enabled');
+    if (!toggle) return;
+    toggle.addEventListener('change', async () => {
+      const settings = await window.JobFill.storage.getSettings();
+      settings.autofillEnabled = toggle.checked;
+      await window.JobFill.storage.saveSettings(settings);
+    });
+  }
+
+  // --- Import / Export ---
+
+  function downloadJSON(data, filename) {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function showToast(message, isError) {
+    const el = document.getElementById('import-status');
+    if (!el) return;
+    el.textContent = message;
+    el.className = 'import-status ' + (isError ? 'error' : 'success');
+    setTimeout(() => { el.textContent = ''; el.className = 'import-status'; }, 4000);
+  }
+
+  function initExportButton() {
+    const btn = document.getElementById('btn-export');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      chrome.runtime.sendMessage({ type: 'EXPORT_DATA' }, (response) => {
+        if (chrome.runtime.lastError || response.error) {
+          showToast('Export failed: ' + (response && response.error ? response.error : 'unknown error'), true);
+          return;
+        }
+        downloadJSON(response.data, 'jobfill-export.json');
+      });
+    });
+  }
+
+  function initImportButton() {
+    const input = document.getElementById('import-input');
+    if (!input) return;
+    input.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        let parsed;
+        try {
+          parsed = JSON.parse(evt.target.result);
+        } catch {
+          showToast('Invalid JSON file.', true);
+          return;
+        }
+        chrome.runtime.sendMessage({ type: 'IMPORT_DATA', payload: parsed }, async (response) => {
+          if (chrome.runtime.lastError || response.error) {
+            showToast('Import failed: ' + (response && response.error ? response.error : 'unknown error'), true);
+            return;
+          }
+          showToast('Import complete.', false);
+          await loadProfile();       // refresh profile tab fields
+          await renderAnswerBank();  // refresh answer bank tab
+        });
+      };
+      reader.readAsText(file);
+      // Reset input so same file can be re-imported
+      e.target.value = '';
+    });
+  }
+
   // --- Init ---
 
-  document.addEventListener('DOMContentLoaded', async function () {
+  document.addEventListener('DOMContentLoaded', async () => {
     initTabs();
     initFillButton();
-    await initProfileTab();
+
+    // Profile tab
+    await loadProfile();
+    bindProfileAutoSave();
+
+    // Resume tab
     await loadResume();
     bindResumeTab();
-    await maybeLoadDefaultTemplates();   // seeds 10 templates if bank is empty
+
+    // Answer Bank tab
+    await maybeLoadDefaultTemplates();
     await renderAnswerBank();
     bindAnswerBank();
-    // Plan 05 will add: loadSettings(), initImportExport()
+
+    // Settings + Import/Export
+    await loadSettings();
+    bindSettings();
+    initExportButton();
+    initImportButton();
   });
 
 })();
