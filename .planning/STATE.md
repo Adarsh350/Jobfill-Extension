@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T04:48:52.327Z"
+last_updated: "2026-03-15T04:49:25.121Z"
 progress:
   total_phases: 12
-  completed_phases: 8
+  completed_phases: 9
   total_plans: 20
-  completed_plans: 18
+  completed_plans: 20
 ---
 
 # Project State
@@ -113,6 +113,10 @@ progress:
 - [Phase 09]: LinkedIn fill() returns [] (not error) when .jobs-easy-apply-modal absent — safe on all non-Easy-Apply LinkedIn pages
 - [Phase 09]: window._jobfillLinkedInObserver stores observer ref — allows content.js to disconnect on overlay dismiss, prevents memory leak
 - [Phase 09]: Modal-scoped selectors require test mock to strip MODAL_SCOPE prefix for querySelector resolution
+- [Phase 09]: Attribute-only selectors enforced structurally in bayt.js — getAdjacentLabel() intentionally omitted
+- [Phase 09]: RTL audit test reads source as text — aria-label/placeholder banned from entire file including comments
+- [Phase 09]: window.top mock must be set to window in beforeEach so detectCrossOrigin() returns false by default in same-origin Node.js tests
+- [Phase 09]: iCIMS resume field always skipped with 'resume upload in Phase 11' consistent with Phase 07 decision
 
 ## Session Log
 
