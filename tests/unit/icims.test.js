@@ -168,10 +168,18 @@ describe('icims', () => {
     _currentDom = buildDom();
     window.JobFill.matcher.findBestAnswer    = function () { return null; };
     window.JobFill.matcher.substituteVariables = function (s) { return s; };
-    // Reset window.top to normal (same-origin) by default
-    if (Object.getOwnPropertyDescriptor(window, 'top') &&
-        Object.getOwnPropertyDescriptor(window, 'top').get) {
+    // Reset window.top to same-origin default (window === window.top means not in iframe)
+    var topDesc = Object.getOwnPropertyDescriptor(window, 'top');
+    if (topDesc && topDesc.get) {
       delete window.top;
+    }
+    // Ensure window.top === window so detectCrossOrigin() returns false by default
+    if (!('top' in window) || window.top !== window) {
+      Object.defineProperty(window, 'top', {
+        value: window,
+        configurable: true,
+        writable: true,
+      });
     }
     // chrome stub
     global.chrome = { runtime: { sendMessage: function () {} } };
@@ -251,8 +259,13 @@ describe('icims', () => {
     const profile = { firstName: 'Jane' };
     const results = await mod.fill(profile, []);
 
-    // Restore window.top
+    // Restore window.top to same-origin default
     delete window.top;
+    Object.defineProperty(window, 'top', {
+      value: window,
+      configurable: true,
+      writable: true,
+    });
 
     assert.ok(Array.isArray(results), 'fill() must return an array');
     assert.ok(results.length > 0, 'must have at least one result');
