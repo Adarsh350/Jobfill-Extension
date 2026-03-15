@@ -158,7 +158,7 @@ Plans:
 **Goal:** Complete the remaining platform modules including the tricky iframe (iCIMS) and modal-step (LinkedIn) cases.
 
 **Plans:**
-1. `platforms/icims.js` — `matches`: `hostname.includes('icims.com')` or `hostname.includes('careers.icims.com')`
+2/4 plans executed
 2. iCIMS iframe detection: check `window !== window.top` (content script is in iframe). Fill fields in the current frame's DOM directly.
 3. Cross-origin iframe detection: if `window.location.origin !== document.referrer origin` → send `ICIMS_CROSS_ORIGIN` message to trigger user warning in overlay
 4. `getJobDetails()` for iCIMS: parse from page title or `<div.iCIMS_JobTitle>`
