@@ -166,6 +166,7 @@ progress:
 - **2026-03-15:** Phase 11 Plan 01 execution complete. utils/filler.js extended with dataUrlToFile, getUniqueSelector, findResumeFileInput, attachResume (4 new exports). background.js RESUME_UPLOAD_FALLBACK stub replaced with handleResumeUploadFallback + attachResumeInMainWorld. 8 new tests added to filler.test.js — 14/14 GREEN, 0 fail, 0 todo. Commit bc25a76.
 - **2026-03-15:** Phase 11 Plan 02 execution complete. All 8 platform modules wired with attachResume + inline RESUME_UPLOAD_FALLBACK. Zero Phase 11 stubs remaining. 23/23 tests GREEN. Commits 3269031, 55c51eb. Phase 11 complete.
 - **2026-03-15:** Phase 12 Plan 01 execution complete. popup.html (4-tab shell, 27 profile fields, modal skeleton) and popup.css (indigo scheme, system fonts, no CDN) created. Zero CSP violations. Commit 4ef5b89.
+- **2026-03-15:** Phase 12 Plan 03 execution complete. resume-tab-fragment.js created (5 functions: formatBytes, showResumeInfo, clearResumeUI, loadResume, bindResumeTab). Fragment approach used to avoid popup.js write conflict with parallel plan 12-02. Auto-fixed: 5 MB size guard (Rule 2 — plan spec mentioned guard but omitted from template). Plan 12-04 will merge. Commit fd3c803.
 
 ---
 
