@@ -209,29 +209,20 @@ Plans:
 
 ## Phase 12: Popup UI, Answer Bank Management & Pre-filled Templates
 
-**Goal:** Complete the popup UI with all three tabs, functional answer bank CRUD, pre-populated marketing templates, and import/export.
+**Goal:** Complete the popup UI with all four tabs, functional answer bank CRUD, pre-populated marketing templates, and import/export.
 
-**Plans:**
-1. `popup.html` + `popup.css`: three-tab layout (Profile / Answer Bank / Import•Export), 360px wide, clean modern design, no inline scripts
-2. Profile tab: all FR-1.1 fields as labeled inputs, resume file picker with filename display + clear button, storage usage bar
-3. Answer Bank tab: scrollable entry list with add/edit/delete. Each entry: question preview, category badge, edit modal. Storage usage bar for answerBank key.
-4. Add/Edit modal: fields for question, keywords (comma-separated), category dropdown, answer textarea, preview of variable substitution
-5. 10 pre-populated marketing answer templates (loaded on first install if answer bank is empty):
-   - "Why marketing?" (motivation/career)
-   - "CRM experience" (skills/tools — Salesforce, HubSpot, Klaviyo)
-   - "Email marketing metrics" (skills/results)
-   - "Product launch experience" (experience)
-   - "Why {{company_name}}?" (motivation/company)
-   - "Work authorization / UAE Golden Visa" (work_auth)
-   - "Notice period / availability" (availability)
-   - "Salary expectations" (salary)
-   - "Remote work experience" (experience)
-   - "Biggest achievement" (experience/impact)
-6. Import/Export tab: Export button (downloads JSON), Import file picker with schema validation feedback
-7. Platform + field count display at top of popup (reads `lastFillStatus` from session storage)
-8. `popup.js`: all event listeners via `addEventListener`, auto-save profile on `input` event, connect to background via `chrome.runtime.sendMessage`
+**Status:** Planned — 5 plans, 3 waves
 
-**UAT Criteria:** Open popup. Navigate all three tabs. Add an answer bank entry, edit it, delete it. Export data as JSON, verify file downloads. Import the exported file, verify data restored. Click Fill Form button — verify fill triggers on current tab.
+**Plans:** 5 plans
+
+Plans:
+- [ ] 12-01-PLAN.md — Wave 1: popup.html complete 4-tab structure + popup.css full styling (indigo scheme, 360px, system fonts)
+- [ ] 12-02-PLAN.md — Wave 2: popup.js — Profile tab wiring (load/auto-save 24 fields, quota bar, tab switching, Fill Form button)
+- [ ] 12-03-PLAN.md — Wave 2: popup.js — Resume tab wiring (file picker, FileReader, display filename+size, clear)
+- [ ] 12-04-PLAN.md — Wave 3: popup.js — Answer Bank tab CRUD (render cards, modal add/edit/delete, 10 default templates, event delegation)
+- [ ] 12-05-PLAN.md — Wave 3: popup.js — Settings tab + Import/Export + final DOMContentLoaded integration (UAT checkpoint)
+
+**UAT Criteria:** Open popup. Navigate all four tabs. Add an answer bank entry, edit it, delete it. Export data as JSON, verify file downloads. Import the exported file, verify data restored. Click Fill Form button — verify fill triggers on current tab.
 
 ---
 
