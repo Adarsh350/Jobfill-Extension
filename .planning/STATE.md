@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in_progress
-last_updated: "2026-03-15T00:00:00.000Z"
+status: unknown
+last_updated: "2026-03-15T04:20:52.337Z"
 progress:
   total_phases: 12
   completed_phases: 6
-  total_plans: 14
+  total_plans: 13
   completed_plans: 12
 ---
 
@@ -100,6 +100,8 @@ progress:
 - [Phase 07]: 07-02 and 07-03 are Wave 2 parallel — both depend only on 07-01 scaffold, no shared files
 - [Phase 07]: Lever urls[LinkedIn] bracket selector works via querySelector (quoted value) + iterative .name check fallback
 - [Phase 07]: Greenhouse work-auth handles both select and radio variants (open question from RESEARCH.md)
+- [Phase 07-03]: Self-contained mini DOM parser in lever.test.js — no jsdom/npm; project has no package.json
+- [Phase 07-03]: document mock built per-test-file rather than dom-mock.js — avoids breaking existing tests
 
 ## Session Log
 
