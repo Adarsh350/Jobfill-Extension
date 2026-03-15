@@ -213,7 +213,7 @@ Plans:
 
 **Status:** Planned — 5 plans, 3 waves
 
-**Plans:** 5 plans
+**Plans:** 5/5 plans complete
 
 Plans:
 - [ ] 12-01-PLAN.md — Wave 1: popup.html complete 4-tab structure + popup.css full styling (indigo scheme, 360px, system fonts)
