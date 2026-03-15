@@ -199,19 +199,38 @@ window.JobFill.platforms.icims = (function () {
   // ---------------------------------------------------------------------------
   // fillStandardFields — fill FIELDS table entries
   // ---------------------------------------------------------------------------
-  function fillStandardFields(profile, results, handledEls) {
+  async function fillStandardFields(profile, results, handledEls) {
     for (var i = 0; i < FIELDS.length; i++) {
       var field = FIELDS[i];
       var el = resolveSelector(field.selectors);
 
-      // File input — always skip (resume upload handled in Phase 11)
+      // File input — attempt resume upload via filler.attachResume
+      // iCIMS runs in iframe — frameId forwarded for executeScript target
       if (field.isFile) {
-        if (el) handledEls.add(el);
-        results.push({
-          field: field.label,
-          status: 'skipped',
-          reason: 'resume upload in Phase 11',
-        });
+        if (!el) {
+          results.push({ field: field.label, status: 'skipped', reason: 'element not found' });
+          continue;
+        }
+        handledEls.add(el);
+        var uploadResult = await window.JobFill.filler.attachResume(el);
+        if (uploadResult === null) {
+          var sel = window.JobFill.filler.getUniqueSelector(el);
+          uploadResult = await new Promise(function(resolve) {
+            chrome.runtime.sendMessage({
+              type: 'RESUME_UPLOAD_FALLBACK',
+              tabId: window._jobfillTabId,
+              frameId: window._jobfillFrameId != null ? window._jobfillFrameId : 0,
+              selector: sel,
+            }, resolve);
+          });
+        }
+        if (uploadResult && (uploadResult.status === 'filled' || uploadResult.status === 'filled_via_main_world')) {
+          results.push({ field: field.label, status: 'filled' });
+        } else if (uploadResult && uploadResult.status === 'skipped') {
+          results.push({ field: field.label, status: 'skipped', reason: uploadResult.reason });
+        } else {
+          results.push({ field: field.label, status: 'failed', reason: (uploadResult && uploadResult.reason) || 'upload failed' });
+        }
         continue;
       }
 
@@ -332,7 +351,7 @@ window.JobFill.platforms.icims = (function () {
     var jobDetails = getJobDetails();
 
     // Pass 1: standard fields
-    fillStandardFields(profile, results, handledEls);
+    await fillStandardFields(profile, results, handledEls);
 
     // Pass 2: custom questions via answer bank
     fillCustomQuestions(answerBank, jobDetails, results, handledEls);

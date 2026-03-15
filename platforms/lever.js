@@ -113,7 +113,7 @@ window.JobFill.platforms.lever = (function () {
     return { companyName: companyName, jobTitle: jobTitle };
   }
 
-  function fillStandardFields(profile, results, handledEls) {
+  async function fillStandardFields(profile, results, handledEls) {
     var filler = window.JobFill.filler;
 
     for (var i = 0; i < FIELDS.length; i++) {
@@ -121,10 +121,28 @@ window.JobFill.platforms.lever = (function () {
       var el = resolveSelector(field.selectors, field.linkedinFallback);
       if (!el) continue;
 
-      // File input — always skip
+      // File input — attempt resume upload via filler.attachResume
       if (field.isFile || el.type === 'file') {
-        results.push({ field: field.label, status: 'skipped', reason: 'resume upload in Phase 11' });
         handledEls.add(el);
+        var uploadResult = await window.JobFill.filler.attachResume(el);
+        if (uploadResult === null) {
+          var sel = window.JobFill.filler.getUniqueSelector(el);
+          uploadResult = await new Promise(function(resolve) {
+            chrome.runtime.sendMessage({
+              type: 'RESUME_UPLOAD_FALLBACK',
+              tabId: window._jobfillTabId,
+              frameId: window._jobfillFrameId != null ? window._jobfillFrameId : 0,
+              selector: sel,
+            }, resolve);
+          });
+        }
+        if (uploadResult && (uploadResult.status === 'filled' || uploadResult.status === 'filled_via_main_world')) {
+          results.push({ field: field.label, status: 'filled' });
+        } else if (uploadResult && uploadResult.status === 'skipped') {
+          results.push({ field: field.label, status: 'skipped', reason: uploadResult.reason });
+        } else {
+          results.push({ field: field.label, status: 'failed', reason: (uploadResult && uploadResult.reason) || 'upload failed' });
+        }
         continue;
       }
 
@@ -209,7 +227,7 @@ window.JobFill.platforms.lever = (function () {
     // getJobDetails called inside fill() — not at load time (SPA timing)
     var jobDetails = getJobDetails();
 
-    fillStandardFields(profile, results, handledEls);
+    await fillStandardFields(profile, results, handledEls);
     fillCustomQuestions(answerBank, jobDetails, results, handledEls);
 
     return results;
