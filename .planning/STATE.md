@@ -2,28 +2,28 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
+status: in_progress
 last_updated: "2026-03-15T00:00:00.000Z"
 progress:
   total_phases: 12
-  completed_phases: 5
-  total_plans: 9
-  completed_plans: 9
+  completed_phases: 6
+  total_plans: 14
+  completed_plans: 11
 ---
 
 # Project State
 
 **Project:** JobFill Chrome Extension
 **Milestone:** 1 — Functional Personal Tool
-**Last Updated:** 2026-03-14
+**Last Updated:** 2026-03-15
 
 ---
 
 ## Current Status
 
-**Phase:** 06-fill-status-overlay (in progress — Plan 02 complete)
-**Active Phase:** Phase 6 Plan 02 complete — utils/overlay.js implemented, all 18 checks pass
-**Next Action:** Phase 6 Plan 03 (content.js coordinator) or remaining Phase 6 plans
+**Phase:** 07-greenhouse-and-lever-platform-modules (planning complete — ready to execute)
+**Active Phase:** Phase 7 plans created (07-01, 07-02, 07-03). Wave 1: scaffold. Wave 2: greenhouse + lever (parallel).
+**Next Action:** Execute Phase 7 — `/gsd:execute-phase 07-greenhouse-and-lever-platform-modules`
 
 ---
 
@@ -53,8 +53,8 @@ progress:
 | 3 | Background Service Worker | ✅ Complete (2026-03-14) |
 | 4 | React/Angular Event Dispatch & Fill Primitives | ✅ Complete (2026-03-14) |
 | 5 | Fuzzy Matcher & Answer Bank Engine | 🔄 In Progress (Plans 01-02 complete) |
-| 6 | Content Script Coordinator & Fill Overlay | 🔄 In Progress (Plan 02 complete) |
-| 7 | Greenhouse & Lever Platform Modules | ⬜ Not started |
+| 6 | Content Script Coordinator & Fill Overlay | ✅ Complete (verified 2026-03-15) |
+| 7 | Greenhouse & Lever Platform Modules | 🔄 Planning complete (3 plans) |
 | 8 | Workday & Ashby Platform Modules | ⬜ Not started |
 | 9 | iCIMS, LinkedIn Easy Apply & Bayt Modules | ⬜ Not started |
 | 10 | Generic Fallback Module | ⬜ Not started |
@@ -96,6 +96,10 @@ progress:
 - [Phase 06-02]: showButton guards against re-render if results panel already visible — prevents double-mount on rapid content.js calls
 - [Phase 06-02]: chrome.runtime.sendMessage wrapped in try/catch — context invalidation expected on tab navigation (NFR-4.4)
 - [Phase 06-02]: dismiss() calls _obs.disconnect() before nulling _host — prevents orphaned MutationObserver leak
+- [Phase 07]: File inputs pushed as skipped/reason='resume upload in Phase 11' in both modules — filler.js returns false for type=file by design
+- [Phase 07]: 07-02 and 07-03 are Wave 2 parallel — both depend only on 07-01 scaffold, no shared files
+- [Phase 07]: Lever urls[LinkedIn] bracket selector works via querySelector (quoted value) + iterative .name check fallback
+- [Phase 07]: Greenhouse work-auth handles both select and radio variants (open question from RESEARCH.md)
 
 ## Session Log
 
@@ -111,6 +115,8 @@ progress:
 - **2026-03-14:** Phase 5 Plan 02 execution: utils/matcher.js implemented (6 exported functions, top-level declarations, dual browser/CJS shim). All 29 matcher.test.js tests pass (0 fail, 0 todo). Commit 341fe19.
 - **2026-03-15:** Phase 6 Plan 01 execution: content.js IIFE coordinator implemented (115 lines). Platform detection, fill lock, non-async DO_FILL listener, MutationObserver with loop guard, initial showButton. background.js patched to inject tabId. All 10 checks pass. Commits 396b53b, 2331ef8.
 - **2026-03-15:** Phase 6 Plan 02 execution: utils/overlay.js implemented (265 lines, Shadow DOM IIFE). showButton, showResults, showBanner, dismiss, setObserverRef. All 18 plan checks pass. Commit cb1ab11.
+- **2026-03-15:** Phase 6 verification complete. 13/13 observable truths verified, 6/6 key links wired, 12/12 requirements satisfied. Phase 6 marked complete.
+- **2026-03-15:** Phase 7 planning complete. 3 plans created: 07-01 (Wave 1: DOM fixtures + test stubs), 07-02 (Wave 2: greenhouse.js TDD), 07-03 (Wave 2: lever.js TDD, parallel with 07-02).
 
 ---
 
