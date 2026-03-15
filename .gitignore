@@ -1,0 +1,24 @@
+# Planning artifacts (optional — keep if you want history)
+# .planning/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (not used in this project but just in case)
+node_modules/
+
+# Build artifacts
+*.zip
+dist/
+
+# Secrets
+.env
+*.pem
