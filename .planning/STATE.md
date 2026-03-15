@@ -6,9 +6,9 @@ status: unknown
 last_updated: "2026-03-15T09:21:40.249Z"
 progress:
   total_phases: 12
-  completed_phases: 10
+  completed_phases: 11
   total_plans: 24
-  completed_plans: 23
+  completed_plans: 24
 ---
 
 # Project State
@@ -21,9 +21,9 @@ progress:
 
 ## Current Status
 
-**Phase:** 11-resume-auto-upload — IN PROGRESS (Plan 01 complete)
-**Active Phase:** Phase 11 — Resume Auto-Upload
-**Next Action:** Execute Phase 11 Plan 02 (platform module integrations)
+**Phase:** 11-resume-auto-upload — COMPLETE
+**Active Phase:** Phase 12 — Popup UI, Answer Bank & Templates
+**Next Action:** Execute Phase 12 Plan 01
 
 ---
 
@@ -58,7 +58,7 @@ progress:
 | 8 | Workday & Ashby Platform Modules | Complete (verified 2026-03-15) |
 | 9 | iCIMS, LinkedIn Easy Apply & Bayt Modules | Complete (verified 2026-03-15) |
 | 10 | Generic Fallback Module | Complete (2026-03-15) |
-| 11 | Resume Auto-Upload | Not started |
+| 11 | Resume Auto-Upload | Complete (2026-03-15) |
 | 12 | Popup UI, Answer Bank & Templates | Not started |
 
 ---
@@ -127,6 +127,11 @@ progress:
 - [Phase 11-01]: attachResumeInMainWorld uses var throughout — serialization safety across page JS engines
 - [Phase 11-01]: handleResumeUploadFallback reads resume fresh from chrome.storage.local — avoids message size limit for large PDFs
 - [Phase 11-01]: frameId defaults to 0 when absent — safe for top-level frame; iCIMS passes explicit frameId
+- [Phase 11-02]: fillStandardFields made async in greenhouse, lever, icims — contains await attachResume call
+- [Phase 11-02]: Workday: findResumeFileInput called first; shadowQueryAll loop only when it returns null
+- [Phase 11-02]: LinkedIn upload scoped to .jobs-easy-apply-modal; graceful skip when modal absent or no file input found
+- [Phase 11-02]: Generic marks resume result needs_review on success — consistent with Phase 10 heuristic policy
+- [Phase 11-02]: iCIMS forwards frameId in RESUME_UPLOAD_FALLBACK for iframe executeScript targeting
 
 ## Session Log
 
@@ -159,6 +164,7 @@ progress:
 - **2026-03-15:** Phase 10 Plan 01 execution complete. 2 files created: tests/fixtures/dom-generic.html (10 fillable fields, 5 excluded inputs, page metadata), tests/unit/generic.test.js (19 todo stubs, 7 describe blocks, self-contained MockNode shim). 19 todo, 0 fail. Full suite exits 0.
 - **2026-03-15:** Phase 10 Plan 02 execution complete. platforms/generic.js implemented (388 lines, IIFE). 19 todo stubs converted to real assertions. All 19 tests GREEN. Auto-fixed: broad selector replaces :not() chains; hasValue checks _attrs.value for test mock. Phase 10 complete. Commits c576e38 (RED), 8295e1b (GREEN).
 - **2026-03-15:** Phase 11 Plan 01 execution complete. utils/filler.js extended with dataUrlToFile, getUniqueSelector, findResumeFileInput, attachResume (4 new exports). background.js RESUME_UPLOAD_FALLBACK stub replaced with handleResumeUploadFallback + attachResumeInMainWorld. 8 new tests added to filler.test.js — 14/14 GREEN, 0 fail, 0 todo. Commit bc25a76.
+- **2026-03-15:** Phase 11 Plan 02 execution complete. All 8 platform modules wired with attachResume + inline RESUME_UPLOAD_FALLBACK. Zero Phase 11 stubs remaining. 23/23 tests GREEN. Commits 3269031, 55c51eb. Phase 11 complete.
 
 ---
 
