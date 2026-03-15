@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T11:00:00.000Z"
+last_updated: "2026-03-15T09:44:24.184Z"
 progress:
   total_phases: 12
-  completed_phases: 11
-  total_plans: 25
-  completed_plans: 25
+  completed_phases: 12
+  total_plans: 29
+  completed_plans: 29
 ---
 
 # Project State
@@ -135,6 +135,8 @@ progress:
 - [Phase 12-02]: collectProfile() reads all fields fresh on each save — avoids stale in-memory state vs storage
 - [Phase 12-02]: input + change events both bound per field — covers text/select/checkbox uniformly without conditional logic
 - [Phase 12-02]: PROFILE_FIELDS has 25 entries (task spec authoritative over plan front-matter which stated 24)
+- [Phase 12-popup-ui]: escapeHtml() applied to all entry fields in innerHTML for defense-in-depth
+- [Phase 12-popup-ui]: Event delegation via .closest() on #answers-list to avoid per-card listener leak
 
 ## Session Log
 
