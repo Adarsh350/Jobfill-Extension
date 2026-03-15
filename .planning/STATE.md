@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T06:00:00Z"
+last_updated: "2026-03-15T09:21:40.249Z"
 progress:
   total_phases: 12
   completed_phases: 10
-  total_plans: 26
-  completed_plans: 26
+  total_plans: 24
+  completed_plans: 23
 ---
 
 # Project State
@@ -21,9 +21,9 @@ progress:
 
 ## Current Status
 
-**Phase:** 10-generic-fallback-module — COMPLETE (2026-03-15)
+**Phase:** 11-resume-auto-upload — IN PROGRESS (Plan 01 complete)
 **Active Phase:** Phase 11 — Resume Auto-Upload
-**Next Action:** Execute Phase 11
+**Next Action:** Execute Phase 11 Plan 02 (platform module integrations)
 
 ---
 
@@ -123,6 +123,10 @@ progress:
 - [Phase 10]: discoverFields() uses usedEls Set — prevents same element being assigned to two profile keys
 - [Phase 10]: Score threshold >= 1 required — prevents random unrelated fields (search bars, newsletter checkboxes) from matching
 - [Phase 10]: shouldSkip() checks both EXCLUDED_TYPES array and CAPTCHA_PATTERNS regex — double-layer CAPTCHA protection
+- [Phase 11-01]: attachResume returns null (not error) on files.length===0 — signals caller to send RESUME_UPLOAD_FALLBACK
+- [Phase 11-01]: attachResumeInMainWorld uses var throughout — serialization safety across page JS engines
+- [Phase 11-01]: handleResumeUploadFallback reads resume fresh from chrome.storage.local — avoids message size limit for large PDFs
+- [Phase 11-01]: frameId defaults to 0 when absent — safe for top-level frame; iCIMS passes explicit frameId
 
 ## Session Log
 
@@ -154,6 +158,7 @@ progress:
 - **2026-03-15:** Phase 10 planning complete. 2 plans created: 10-01 (Wave 1: dom-generic.html fixture + generic.test.js 19 todo stubs), 10-02 (Wave 2: generic.js TDD — 19 tests, heuristic scoring, needs_review policy, CAPTCHA exclusion).
 - **2026-03-15:** Phase 10 Plan 01 execution complete. 2 files created: tests/fixtures/dom-generic.html (10 fillable fields, 5 excluded inputs, page metadata), tests/unit/generic.test.js (19 todo stubs, 7 describe blocks, self-contained MockNode shim). 19 todo, 0 fail. Full suite exits 0.
 - **2026-03-15:** Phase 10 Plan 02 execution complete. platforms/generic.js implemented (388 lines, IIFE). 19 todo stubs converted to real assertions. All 19 tests GREEN. Auto-fixed: broad selector replaces :not() chains; hasValue checks _attrs.value for test mock. Phase 10 complete. Commits c576e38 (RED), 8295e1b (GREEN).
+- **2026-03-15:** Phase 11 Plan 01 execution complete. utils/filler.js extended with dataUrlToFile, getUniqueSelector, findResumeFileInput, attachResume (4 new exports). background.js RESUME_UPLOAD_FALLBACK stub replaced with handleResumeUploadFallback + attachResumeInMainWorld. 8 new tests added to filler.test.js — 14/14 GREEN, 0 fail, 0 todo. Commit bc25a76.
 
 ---
 
