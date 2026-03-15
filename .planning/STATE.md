@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T04:33:55.394Z"
+last_updated: "2026-03-15T04:34:01.735Z"
 progress:
   total_phases: 12
   completed_phases: 8
@@ -105,6 +105,7 @@ progress:
 - [Phase 08]: createRequire uses __filename not import.meta.url — project is CJS-only, import.meta triggers ESM parse error
 - [Phase 08-02]: fillCustomQuestions deferred for Workday — custom questions require UAT before implementing
 - [Phase 08-02]: isVisible uses offsetParent !== null — standard DOM visibility check, testable in Node with mock objects
+- [Phase 08-03]: Ashby uses hostname.indexOf over regex for matches(); bare textarea fallback appended after data-field-type scan; getJobDetails tiered parse: at-X regex -> pipe split -> empty
 
 ## Session Log
 
