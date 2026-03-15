@@ -47,34 +47,140 @@ before(() => {
     platforms: {},
   };
 
-  // Attempt to load platforms/workday.js — file does not exist yet in Wave 1.
-  // Catch the error so stubs still register and all tests run as todo.
-  try {
-    const req = createRequire(__filename);
-    req('../../platforms/workday');
-  } catch (e) {
-    // Module not yet implemented — expected in Wave 1 scaffold
-  }
+  // Load platforms/workday.js
+  const req = createRequire(__filename);
+  req('../../platforms/workday');
 });
 
 // ---------------------------------------------------------------------------
-// Test stubs — all marked todo; 0 failures expected
+// Tests — all real assertions, 0 todo
 // ---------------------------------------------------------------------------
 
 describe('workday', function () {
 
-  it('TEST: matches returns true for myworkdayjobs.com hostname', { todo: true }, function () {});
+  it('TEST: matches returns true for myworkdayjobs.com hostname', function () {
+    var wd = window.JobFill.platforms.workday;
+    assert.equal(wd.matches('acme.myworkdayjobs.com'), true);
+  });
 
-  it('TEST: matches returns false for greenhouse.io', { todo: true }, function () {});
+  it('TEST: matches returns false for greenhouse.io', function () {
+    var wd = window.JobFill.platforms.workday;
+    assert.equal(wd.matches('greenhouse.io'), false);
+  });
 
-  it('TEST: fill resolves firstName from shadow DOM fixture', { todo: true }, function () {});
+  it('TEST: fill resolves firstName from shadow DOM fixture', async function () {
+    var wd = window.JobFill.platforms.workday;
 
-  it('TEST: fill skips field if already has value', { todo: true }, function () {});
+    // Override shadowQuery to return a mock firstName input for the primary selector
+    var mockEl = { value: '', offsetParent: {}, tagName: 'INPUT' };
+    window.JobFill.filler.shadowQuery = function (root, selector) {
+      if (selector === '[data-automation-id="legalNameSection_firstName"]') return mockEl;
+      return null;
+    };
 
-  it('TEST: fill skips field if not visible (isVisible guard)', { todo: true }, function () {});
+    var profile = { firstName: 'Jane', lastName: 'Doe', email: 'jane@example.com' };
+    var results = await wd.fill(profile, []);
 
-  it('TEST: fill calls dispatchBlur after each filled field', { todo: true }, function () {});
+    var firstNameResult = results.find(function (r) { return r.field === 'First Name'; });
+    assert.ok(firstNameResult, 'should have a First Name result');
+    assert.equal(firstNameResult.status, 'filled');
 
-  it('TEST: getJobDetails returns jobTitle from jobPostingHeader and companyName from subdomain', { todo: true }, function () {});
+    // Restore stub
+    window.JobFill.filler.shadowQuery = function () { return null; };
+  });
+
+  it('TEST: fill skips field if already has value', async function () {
+    var wd = window.JobFill.platforms.workday;
+
+    // Element already has a value
+    var mockEl = { value: 'existing@email.com', offsetParent: {}, tagName: 'INPUT' };
+    window.JobFill.filler.shadowQuery = function (root, selector) {
+      if (selector === '[data-automation-id="email"]') return mockEl;
+      return null;
+    };
+
+    var profile = { email: 'new@email.com' };
+    var results = await wd.fill(profile, []);
+
+    var emailResult = results.find(function (r) { return r.field === 'Email'; });
+    assert.ok(emailResult, 'should have an Email result');
+    assert.equal(emailResult.status, 'skipped');
+    assert.equal(emailResult.reason, 'already has value');
+
+    // Restore stub
+    window.JobFill.filler.shadowQuery = function () { return null; };
+  });
+
+  it('TEST: fill skips field if not visible (isVisible guard)', async function () {
+    var wd = window.JobFill.platforms.workday;
+
+    // offsetParent === null means not visible
+    var mockEl = { value: '', offsetParent: null, tagName: 'INPUT' };
+    window.JobFill.filler.shadowQuery = function (root, selector) {
+      if (selector === '[data-automation-id="phone-number"]') return mockEl;
+      return null;
+    };
+
+    var profile = { phone: '555-1234' };
+    var results = await wd.fill(profile, []);
+
+    var phoneResult = results.find(function (r) { return r.field === 'Phone'; });
+    assert.ok(phoneResult, 'should have a Phone result');
+    assert.equal(phoneResult.status, 'skipped');
+    assert.equal(phoneResult.reason, 'not visible');
+
+    // Restore stub
+    window.JobFill.filler.shadowQuery = function () { return null; };
+  });
+
+  it('TEST: fill calls dispatchBlur after each filled field', async function () {
+    var wd = window.JobFill.platforms.workday;
+
+    // Reset blur count
+    window.JobFill.events._blurCount = 0;
+
+    var mockEl = { value: '', offsetParent: {}, tagName: 'INPUT' };
+    window.JobFill.filler.shadowQuery = function (root, selector) {
+      if (selector === '[data-automation-id="legalNameSection_lastName"]') return mockEl;
+      return null;
+    };
+
+    var profile = { lastName: 'Smith' };
+    await wd.fill(profile, []);
+
+    assert.ok(
+      window.JobFill.events._blurCount >= 1,
+      'dispatchBlur should have been called at least once'
+    );
+
+    // Restore stub
+    window.JobFill.filler.shadowQuery = function () { return null; };
+    window.JobFill.events._blurCount = 0;
+  });
+
+  it('TEST: getJobDetails returns jobTitle from jobPostingHeader and companyName from subdomain', function () {
+    var wd = window.JobFill.platforms.workday;
+
+    // Mock shadowQuery to return h2 element with textContent
+    var mockH2 = { textContent: 'Senior Product Marketing Manager' };
+    window.JobFill.filler.shadowQuery = function (root, selector) {
+      if (selector === 'h2[data-automation-id="jobPostingHeader"]') return mockH2;
+      return null;
+    };
+
+    // Mock window.location for subdomain extraction
+    var origLocation = global.location;
+    global.location = { hostname: 'acme.myworkdayjobs.com' };
+
+    var details = wd.getJobDetails();
+
+    assert.equal(details.jobTitle, 'Senior Product Marketing Manager');
+    assert.equal(details.companyName, 'acme');
+
+    // Restore
+    window.JobFill.filler.shadowQuery = function () { return null; };
+    if (origLocation !== undefined) global.location = origLocation;
+    else delete global.location;
+  });
 
 });
