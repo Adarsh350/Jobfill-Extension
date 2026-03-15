@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T04:49:25.121Z"
+last_updated: "2026-03-15T06:00:00Z"
 progress:
   total_phases: 12
   completed_phases: 9
-  total_plans: 20
-  completed_plans: 20
+  total_plans: 26
+  completed_plans: 24
 ---
 
 # Project State
@@ -21,9 +21,9 @@ progress:
 
 ## Current Status
 
-**Phase:** 08-workday-and-ashby-platform-modules — COMPLETE (verified 2026-03-15)
-**Active Phase:** Phase 9 — iCIMS, LinkedIn Easy Apply & Bayt Modules
-**Next Action:** Execute Phase 9 Wave 2 — run 09-02 (icims.js TDD), 09-03 (linkedin.js TDD), 09-04 (bayt.js TDD) in parallel
+**Phase:** 09-icims-linkedin-easy-apply-and-bayt-modules — COMPLETE (verified 2026-03-15)
+**Active Phase:** Phase 10 — Generic Fallback Module
+**Next Action:** Execute Phase 10 Wave 1 (10-01: DOM fixture + test stubs), then Wave 2 (10-02: generic.js TDD)
 
 ---
 
@@ -56,8 +56,8 @@ progress:
 | 6 | Content Script Coordinator & Fill Overlay | Complete (verified 2026-03-15) |
 | 7 | Greenhouse & Lever Platform Modules | Complete (verified 2026-03-15) |
 | 8 | Workday & Ashby Platform Modules | Complete (verified 2026-03-15) |
-| 9 | iCIMS, LinkedIn Easy Apply & Bayt Modules | Planned — ready to execute |
-| 10 | Generic Fallback Module | Not started |
+| 9 | iCIMS, LinkedIn Easy Apply & Bayt Modules | Complete (verified 2026-03-15) |
+| 10 | Generic Fallback Module | Planned — ready to execute |
 | 11 | Resume Auto-Upload | Not started |
 | 12 | Popup UI, Answer Bank & Templates | Not started |
 
@@ -117,6 +117,12 @@ progress:
 - [Phase 09]: RTL audit test reads source as text — aria-label/placeholder banned from entire file including comments
 - [Phase 09]: window.top mock must be set to window in beforeEach so detectCrossOrigin() returns false by default in same-origin Node.js tests
 - [Phase 09]: iCIMS resume field always skipped with 'resume upload in Phase 11' consistent with Phase 07 decision
+- [Phase 10]: matches() always returns true — generic is last in content.js platform priority order; correct ordering enforced by manifest.json load sequence not by this module
+- [Phase 10]: All successful fills in generic.js use status 'needs_review' (never 'filled') — heuristic detection cannot guarantee correctness per ROADMAP Phase 10 spec
+- [Phase 10]: fullName key added to KEYWORD_MAP to handle single-name-field forms; value = firstName + ' ' + lastName
+- [Phase 10]: discoverFields() uses usedEls Set — prevents same element being assigned to two profile keys
+- [Phase 10]: Score threshold >= 1 required — prevents random unrelated fields (search bars, newsletter checkboxes) from matching
+- [Phase 10]: shouldSkip() checks both EXCLUDED_TYPES array and CAPTCHA_PATTERNS regex — double-layer CAPTCHA protection
 
 ## Session Log
 
@@ -143,6 +149,10 @@ progress:
 - **2026-03-15:** Phase 8 verification complete. 13/13 observable truths verified, all key links wired, 7/7 requirements satisfied. workday.js 7/7 GREEN, ashby.js 6/6 GREEN. Phase 8 marked complete.
 - **2026-03-15:** Phase 9 planning complete. 4 plans created: 09-01 (Wave 1: DOM fixtures + test stubs for iCIMS/LinkedIn/Bayt — 20 todo stubs total), 09-02 (Wave 2: icims.js TDD — 7 tests, cross-origin guard), 09-03 (Wave 2: linkedin.js TDD — 7 tests, modal + delay + MutationObserver, parallel), 09-04 (Wave 2: bayt.js TDD — 6 tests, RTL attribute-only selectors, parallel).
 - **2026-03-15:** Phase 9 Plan 01 execution complete. 6 files created: dom-icims.html, dom-linkedin.html, dom-bayt.html, icims.test.js (7 stubs), linkedin.test.js (7 stubs), bayt.test.js (6 stubs). 20 todo stubs, 0 fail. Commit b91a8cf.
+- **2026-03-15:** Phase 9 execution complete. icims.js (345 lines, 7/7 GREEN), linkedin.js (203 lines, 7/7 GREEN), bayt.js (231 lines, 6/6 GREEN). Full suite 95/95 pass, 0 fail, 0 todo.
+- **2026-03-15:** Phase 9 verification complete. 20/20 observable truths verified, all key links wired, 6/6 requirements satisfied. Phase 9 marked complete.
+- **2026-03-15:** Phase 10 planning complete. 2 plans created: 10-01 (Wave 1: dom-generic.html fixture + generic.test.js 19 todo stubs), 10-02 (Wave 2: generic.js TDD — 19 tests, heuristic scoring, needs_review policy, CAPTCHA exclusion).
+- **2026-03-15:** Phase 10 Plan 01 execution complete. 2 files created: tests/fixtures/dom-generic.html (10 fillable fields, 5 excluded inputs, page metadata), tests/unit/generic.test.js (19 todo stubs, 7 describe blocks, self-contained MockNode shim). 19 todo, 0 fail. Full suite exits 0.
 
 ---
 
