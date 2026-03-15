@@ -88,6 +88,10 @@ progress:
 - [Phase 05-02]: ALIAS_MAP lookup is exact on targetLower — prevents 'us' fuzzy-matching to 'uae'
 - [Phase 05-02]: substituteVariables returns match (not '') for unknown keys — keeps {{token}} visible per FR-3.7
 - [Phase 05-02]: findBestAnswer threshold 0.75 — returns null below, consistent with FR-3.7 confidence gate
+- [Phase 06-01]: tabId injected by background.js into DO_FILL payload — chrome.tabs.getCurrent() unavailable in content scripts
+- [Phase 06-01]: onMessage listener is non-async returning true synchronously — async listeners break Chrome message channel
+- [Phase 06-01]: MutationObserver guarded with n.closest('#jobfill-overlay-host') — prevents infinite loop when overlay renders inputs
+- [Phase 06-01]: Platform detection runs once at IIFE init — hostname is stable for page lifetime
 - [Phase 06-02]: _container div pattern used — style tag appended directly to _shadow, only _container.innerHTML cleared, preserving injected CSS across all overlay calls
 - [Phase 06-02]: showButton guards against re-render if results panel already visible — prevents double-mount on rapid content.js calls
 - [Phase 06-02]: chrome.runtime.sendMessage wrapped in try/catch — context invalidation expected on tab navigation (NFR-4.4)
@@ -105,6 +109,7 @@ progress:
 - **2026-03-14:** Phase 4 Plan 02 execution: utils/events.js implemented (7 functions, IIFE pattern, native setter). All 9 events.test.js tests pass (0 fail, 0 todo). Commit c07b961.
 - **2026-03-14:** Phase 4 Plan 03 execution: utils/filler.js implemented (7 functions, IIFE pattern, fill lock, shadowQuery, waitForElement). All 6 filler.test.js tests pass. Full suite 14/14. Commit a8d10d9. Phase 4 complete.
 - **2026-03-14:** Phase 5 Plan 02 execution: utils/matcher.js implemented (6 exported functions, top-level declarations, dual browser/CJS shim). All 29 matcher.test.js tests pass (0 fail, 0 todo). Commit 341fe19.
+- **2026-03-15:** Phase 6 Plan 01 execution: content.js IIFE coordinator implemented (115 lines). Platform detection, fill lock, non-async DO_FILL listener, MutationObserver with loop guard, initial showButton. background.js patched to inject tabId. All 10 checks pass. Commits 396b53b, 2331ef8.
 - **2026-03-15:** Phase 6 Plan 02 execution: utils/overlay.js implemented (265 lines, Shadow DOM IIFE). showButton, showResults, showBanner, dismiss, setObserverRef. All 18 plan checks pass. Commit cb1ab11.
 
 ---
