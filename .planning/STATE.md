@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T04:34:01.735Z"
+last_updated: "2026-03-15T06:00:00Z"
 progress:
   total_phases: 12
   completed_phases: 8
-  total_plans: 16
+  total_plans: 20
   completed_plans: 16
 ---
 
@@ -21,9 +21,9 @@ progress:
 
 ## Current Status
 
-**Phase:** 07-greenhouse-and-lever-platform-modules — COMPLETE (verified 2026-03-15)
-**Active Phase:** Phase 8 — Workday & Ashby Platform Modules
-**Next Action:** Execute Phase 8 — run 08-01-PLAN.md (Wave 1), then 08-02 + 08-03 in parallel (Wave 2)
+**Phase:** 08-workday-and-ashby-platform-modules — COMPLETE (verified 2026-03-15)
+**Active Phase:** Phase 9 — iCIMS, LinkedIn Easy Apply & Bayt Modules
+**Next Action:** Execute Phase 9 — run 09-01-PLAN.md (Wave 1), then 09-02 + 09-03 + 09-04 in parallel (Wave 2)
 
 ---
 
@@ -55,8 +55,8 @@ progress:
 | 5 | Fuzzy Matcher & Answer Bank Engine | In Progress (Plans 01-02 complete) |
 | 6 | Content Script Coordinator & Fill Overlay | Complete (verified 2026-03-15) |
 | 7 | Greenhouse & Lever Platform Modules | Complete (verified 2026-03-15) |
-| 8 | Workday & Ashby Platform Modules | Planned — ready to execute |
-| 9 | iCIMS, LinkedIn Easy Apply & Bayt Modules | Not started |
+| 8 | Workday & Ashby Platform Modules | Complete (verified 2026-03-15) |
+| 9 | iCIMS, LinkedIn Easy Apply & Bayt Modules | Planned — ready to execute |
 | 10 | Generic Fallback Module | Not started |
 | 11 | Resume Auto-Upload | Not started |
 | 12 | Popup UI, Answer Bank & Templates | Not started |
@@ -106,6 +106,12 @@ progress:
 - [Phase 08-02]: fillCustomQuestions deferred for Workday — custom questions require UAT before implementing
 - [Phase 08-02]: isVisible uses offsetParent !== null — standard DOM visibility check, testable in Node with mock objects
 - [Phase 08-03]: Ashby uses hostname.indexOf over regex for matches(); bare textarea fallback appended after data-field-type scan; getJobDetails tiered parse: at-X regex -> pipe split -> empty
+- [Phase 09]: Wave 2 has 3 parallel TDD plans (09-02, 09-03, 09-04) — all depend only on 09-01 scaffold, no shared files
+- [Phase 09]: iCIMS cross-origin detection uses two-step check: window===window.top (not in iframe) then try/catch on window.top.location.href — avoids pitfall 1 (treating all iframes as cross-origin)
+- [Phase 09]: getAdjacentLabel() intentionally omitted from bayt.js — enforces RTL constraint at source level, label text cannot accidentally be used for field matching
+- [Phase 09]: Bayt fillCustomQuestions pushes needs_review for all textarea (no findBestAnswer call) — Arabic question text breaks keyword matching per FR-7.5
+- [Phase 09]: LinkedIn fill() returns [] (not error) when .jobs-easy-apply-modal absent — safe on all non-Easy-Apply LinkedIn pages
+- [Phase 09]: window._jobfillLinkedInObserver stores observer ref — allows content.js to disconnect on overlay dismiss, prevents memory leak
 
 ## Session Log
 
@@ -128,6 +134,9 @@ progress:
 - **2026-03-15:** Phase 7 Plan 03 execution complete. platforms/lever.js implemented (219 lines, IIFE). All 8 lever tests GREEN. Self-contained mini DOM parser built in test file (no jsdom). Commits 2ceb7c4 (RED), 559efa2 (GREEN).
 - **2026-03-15:** Phase 7 verification complete. 9/9 observable truths verified, all key links wired, 11/11 requirements satisfied. greenhouse.js 10/10 GREEN, lever.js 8/8 GREEN. Phase 7 marked complete.
 - **2026-03-15:** Phase 8 planning complete. 3 plans created: 08-01 (Wave 1: DOM fixtures + test stubs for Workday + Ashby), 08-02 (Wave 2: workday.js TDD — 7 tests, shadow DOM + blur dispatch), 08-03 (Wave 2: ashby.js TDD — 6 tests, [data-field-type] custom questions, parallel with 08-02).
+- **2026-03-15:** Phase 8 execution complete. platforms/workday.js (7 tests GREEN) and platforms/ashby.js (6 tests GREEN) implemented. All 13 tests pass, 0 fail, 0 todo.
+- **2026-03-15:** Phase 8 verification complete. 13/13 observable truths verified, all key links wired, 7/7 requirements satisfied. workday.js 7/7 GREEN, ashby.js 6/6 GREEN. Phase 8 marked complete.
+- **2026-03-15:** Phase 9 planning complete. 4 plans created: 09-01 (Wave 1: DOM fixtures + test stubs for iCIMS/LinkedIn/Bayt — 20 todo stubs total), 09-02 (Wave 2: icims.js TDD — 7 tests, cross-origin guard), 09-03 (Wave 2: linkedin.js TDD — 7 tests, modal + delay + MutationObserver, parallel), 09-04 (Wave 2: bayt.js TDD — 6 tests, RTL attribute-only selectors, parallel).
 
 ---
 
