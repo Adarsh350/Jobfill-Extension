@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Apply to this role at Acme Corp today.">
+  <title>Senior Product Manager | Acme Corp</title>
+</head>
+<body>
+  <h1>Senior Product Manager</h1>
+  <p>Join our team at Acme Corp and make an impact.</p>
+
+  <form id="application-form" action="/apply" method="post">
+
+    <!-- Standard fillable inputs -->
+    <div class="field-group">
+      <label for="first_name">First Name</label>
+      <input type="text" name="first_name" id="first_name" placeholder="First name">
+    </div>
+
+    <div class="field-group">
+      <label for="last_name">Last Name</label>
+      <input type="text" name="last_name" id="last_name" placeholder="Last name">
+    </div>
+
+    <div class="field-group">
+      <label for="email_address">Email Address</label>
+      <input type="email" name="email_address" id="email_address" placeholder="Email address">
+    </div>
+
+    <div class="field-group">
+      <label for="contact_phone">Phone Number</label>
+      <input type="tel" name="contact_phone" id="contact_phone" placeholder="Phone number">
+    </div>
+
+    <div class="field-group">
+      <label for="city_location">City</label>
+      <input type="text" name="city_location" id="city_location" placeholder="City">
+    </div>
+
+    <div class="field-group">
+      <label for="linkedin_profile">LinkedIn Profile URL</label>
+      <input type="text" name="linkedin_profile" id="linkedin_profile" placeholder="LinkedIn URL">
+    </div>
+
+    <div class="field-group">
+      <label for="portfolio_website">Portfolio or Website</label>
+      <input type="text" name="portfolio_website" id="portfolio_website" placeholder="Portfolio or website URL">
+    </div>
+
+    <div class="field-group">
+      <label for="current_job_title">Current Title</label>
+      <input type="text" name="current_job_title" id="current_job_title" placeholder="Current title or role">
+    </div>
+
+    <div class="field-group">
+      <label for="cover_message">Cover Letter / Summary</label>
+      <textarea name="cover_message" id="cover_message" placeholder="Cover letter or summary"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="work_authorization_status">Work Authorization</label>
+      <select name="work_authorization_status" id="work_authorization_status">
+        <option value="">-- Select --</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+    </div>
+
+    <!-- Inputs that MUST be excluded by shouldSkip() -->
+    <input type="hidden" name="csrf_token" value="abc123xyz">
+    <input type="submit" name="submit_application" value="Apply">
+    <input type="password" name="account_password" id="account_password" placeholder="Password">
+    <input type="file" name="resume_upload" id="resume_upload">
+    <input type="text" name="g-recaptcha-response" id="g-recaptcha-response" value="">
+
+  </form>
+</body>
+</html>
