@@ -86,6 +86,10 @@ global.document = {
     if (sel === '#applyForm' || sel === 'form#applyForm') {
       return _isBaytForm ? { tagName: 'FORM', id: 'applyForm' } : null;
     }
+    // Combined selector used by isNativeBaytForm
+    if (sel === 'form[action*="bayt.com"], form[id*="apply"], #applyForm') {
+      return _isBaytForm ? { tagName: 'FORM', id: 'applyForm' } : null;
+    }
 
     // PascalCase ID selectors
     if (sel === '#FirstName'   || sel === 'input#FirstName')   return els.FirstName;
@@ -113,6 +117,9 @@ global.document = {
     const { els } = _currentDom;
     if (sel === 'input, textarea, select') {
       return [els.FirstName, els.LastName, els.Email, els.Phone, els.CoverLetter];
+    }
+    if (sel === 'textarea') {
+      return [els.CoverLetter];
     }
     return [];
   },
@@ -166,22 +173,65 @@ describe('bayt', () => {
     return window.JobFill.platforms && window.JobFill.platforms.bayt;
   }
 
-  test('TEST: matches() returns true for bayt.com hostname',
-    { todo: 'implement platforms/bayt.js' }, () => {});
+  test('TEST: matches() returns true for bayt.com hostname', () => {
+    const mod = bayt();
+    assert.ok(mod, 'platforms/bayt.js must be loaded');
+    assert.strictEqual(mod.matches('www.bayt.com'), true, 'matches www.bayt.com');
+    assert.strictEqual(mod.matches('bayt.com'), true, 'matches bayt.com');
+    assert.strictEqual(mod.matches('greenhouse.io'), false, 'does not match greenhouse.io');
+  });
 
-  test('TEST: fill() fills FirstName using name attribute selector',
-    { todo: 'implement platforms/bayt.js' }, () => {});
+  test('TEST: fill() fills FirstName using name attribute selector', async () => {
+    const mod = bayt();
+    assert.ok(mod, 'platforms/bayt.js must be loaded');
+    const profile = { firstName: 'Jane', lastName: 'Doe', email: 'jane@example.com', phone: '+1234567890' };
+    const results = await mod.fill(profile, []);
+    const r = results.find(x => x.field === 'First Name');
+    assert.ok(r, 'First Name result must exist');
+    assert.strictEqual(r.status, 'filled', 'First Name status must be filled');
+    assert.strictEqual(_currentDom.els.FirstName.value, 'Jane', 'FirstName element value must be set');
+  });
 
-  test('TEST: fill() fills Email using type=email selector',
-    { todo: 'implement platforms/bayt.js' }, () => {});
+  test('TEST: fill() fills Email using type=email selector', async () => {
+    const mod = bayt();
+    assert.ok(mod, 'platforms/bayt.js must be loaded');
+    const profile = { firstName: 'Jane', lastName: 'Doe', email: 'jane@example.com', phone: '+1234567890' };
+    const results = await mod.fill(profile, []);
+    const r = results.find(x => x.field === 'Email');
+    assert.ok(r, 'Email result must exist');
+    assert.strictEqual(r.status, 'filled', 'Email status must be filled');
+  });
 
-  test('TEST: fill() does not use label text for field identification',
-    { todo: 'implement platforms/bayt.js' }, () => {});
+  test('TEST: fill() does not use label text for field identification', () => {
+    // Source-code audit: reads platforms/bayt.js as text and asserts
+    // no selector contains placeholder, aria-label, or Arabic Unicode characters
+    const baytPath = path.resolve(__dirname, '../../platforms/bayt.js');
+    assert.ok(fs.existsSync(baytPath), 'platforms/bayt.js must exist');
+    const src = fs.readFileSync(baytPath, 'utf8');
+    assert.ok(!/placeholder\s*\*/i.test(src), 'No selector must reference placeholder');
+    assert.ok(!/aria-label/i.test(src), 'No selector must reference aria-label');
+    // Ensure no Arabic Unicode characters appear inside selector strings
+    // Arabic block: U+0600–U+06FF
+    assert.ok(!/[\u0600-\u06FF]/.test(src), 'No Arabic characters in source');
+  });
 
-  test('TEST: fill() returns skipped when isNativeBaytForm() returns false',
-    { todo: 'implement platforms/bayt.js' }, () => {});
+  test('TEST: fill() returns skipped when isNativeBaytForm() returns false', async () => {
+    _isBaytForm = false;
+    const mod = bayt();
+    assert.ok(mod, 'platforms/bayt.js must be loaded');
+    const profile = { firstName: 'Jane', lastName: 'Doe', email: 'jane@example.com', phone: '+1234567890' };
+    const results = await mod.fill(profile, []);
+    assert.strictEqual(results.length, 0, 'fill() must return empty array when not a Bayt form');
+  });
 
-  test('TEST: fill() fills Phone using type=tel or name=Phone selector',
-    { todo: 'implement platforms/bayt.js' }, () => {});
+  test('TEST: fill() fills Phone using type=tel or name=Phone selector', async () => {
+    const mod = bayt();
+    assert.ok(mod, 'platforms/bayt.js must be loaded');
+    const profile = { firstName: 'Jane', lastName: 'Doe', email: 'jane@example.com', phone: '+1234567890' };
+    const results = await mod.fill(profile, []);
+    const r = results.find(x => x.field === 'Phone');
+    assert.ok(r, 'Phone result must exist');
+    assert.strictEqual(r.status, 'filled', 'Phone status must be filled');
+  });
 
 });
