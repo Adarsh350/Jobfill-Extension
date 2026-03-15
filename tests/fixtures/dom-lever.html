@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lever Application Form Fixture</title>
+</head>
+<body>
+  <div class="main-header-logo">
+    <img alt="Acme Corp" src="logo.png">
+  </div>
+
+  <h2>Product Marketing Manager</h2>
+
+  <form id="application-form">
+    <div class="application-field">
+      <label>Full Name</label>
+      <input name="name" type="text">
+    </div>
+
+    <div class="application-field">
+      <label>Email</label>
+      <input name="email" type="email">
+    </div>
+
+    <div class="application-field">
+      <label>Phone</label>
+      <input name="phone" type="tel">
+    </div>
+
+    <div class="application-field">
+      <label>LinkedIn Profile</label>
+      <input name="urls[LinkedIn]" type="text">
+    </div>
+
+    <div class="application-field">
+      <label>Portfolio</label>
+      <input name="urls[Portfolio]" type="text">
+    </div>
+
+    <div class="application-field">
+      <label>Resume</label>
+      <input name="resume" type="file">
+    </div>
+
+    <div class="application-field">
+      <label>Cover Letter</label>
+      <textarea name="comments" placeholder="Cover letter"></textarea>
+    </div>
+
+    <div data-qa="additional-cards-question">
+      <label>Why are you interested?</label>
+      <textarea></textarea>
+    </div>
+  </form>
+</body>
+</html>
