@@ -21,6 +21,7 @@ window.JobFill.events = (function () {
     ).set;
     nativeSetter.call(el, value);
     dispatchInputChange(el);
+    return true;
   }
 
   function fillTextarea(el, value) {
@@ -29,6 +30,7 @@ window.JobFill.events = (function () {
     ).set;
     nativeSetter.call(el, value);
     dispatchInputChange(el);
+    return true;
   }
 
   function fillSelect(el, value) {

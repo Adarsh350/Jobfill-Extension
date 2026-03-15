@@ -231,6 +231,12 @@ before(() => {
         if (el) el.value = value;
         return true;
       },
+      attachResume: function () {
+        return Promise.resolve({ status: 'skipped', reason: 'resume upload in Phase 11' });
+      },
+      getUniqueSelector: function (el) {
+        return el.id ? '#' + el.id : 'input[type="file"]';
+      },
     },
     events: {},
     matcher: {
