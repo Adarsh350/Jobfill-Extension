@@ -54,7 +54,9 @@ window.JobFill.platforms.greenhouse = (function () {
       profileKey: 'linkedinUrl',
       selectors: [
         'input#job_application_linkedin_profile',
-        'input[name*="linkedin"]',
+        'input[name*="linkedin" i]',
+        'input[id*="linkedin" i]',
+        'input[autocomplete*="linkedin" i]',
         'input[placeholder*="linkedin" i]',
       ],
     },
@@ -74,7 +76,8 @@ window.JobFill.platforms.greenhouse = (function () {
       selectors: [
         'textarea#cover_letter',
         'textarea[name="cover_letter"]',
-        'textarea[id*="cover"]',
+        'textarea[name*="cover" i]',
+        'textarea[id*="cover" i]',
       ],
     },
     {
@@ -82,7 +85,10 @@ window.JobFill.platforms.greenhouse = (function () {
       profileKey: 'city',
       selectors: [
         'select#job_application_location',
-        'input[name*="location"]',
+        'input[name*="city" i]',
+        'input[id*="location" i]',
+        'input[name*="location" i]',
+        'input[id*="city" i]',
         'input[placeholder*="location" i]',
       ],
     },
@@ -91,7 +97,10 @@ window.JobFill.platforms.greenhouse = (function () {
       profileKey: 'workAuthorization',
       selectors: [
         'select[name*="work_auth"]',
+        'select[name*="work" i]',
+        'select[id*="work" i]',
         'select[name*="authorization"]',
+        'input[name*="work_auth" i]',
         'input[type="radio"][name*="auth"]',
       ],
     },
@@ -269,8 +278,12 @@ window.JobFill.platforms.greenhouse = (function () {
       }
 
       // Fill the element
+      // fillField may return undefined for inputs whose event helpers don't
+      // explicitly return true (e.g. older builds of events.js).  If the
+      // native value was set successfully we treat that as filled regardless.
       var filled = window.JobFill.filler.fillField(el, value);
-      if (filled) {
+      var valueSet = (el.value === value);
+      if (filled || valueSet) {
         results.push({ field: field.label, status: 'filled', value: value });
       } else {
         results.push({ field: field.label, status: 'failed', reason: 'fillField returned false' });
