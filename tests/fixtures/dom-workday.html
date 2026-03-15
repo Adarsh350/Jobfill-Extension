@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Workday Application Form Fixture</title>
+</head>
+<body>
+  <div id="workday-app">
+    <h2 data-automation-id="jobPostingHeader">Senior Product Marketing Manager</h2>
+
+    <!-- Shadow host: firstName -->
+    <div id="host-firstName"></div>
+
+    <!-- Shadow host: lastName -->
+    <div id="host-lastName"></div>
+
+    <!-- Shadow host: email -->
+    <div id="host-email"></div>
+
+    <!-- Shadow host: phone -->
+    <div id="host-phone"></div>
+
+    <!-- Shadow host: city -->
+    <div id="host-city"></div>
+
+    <!-- Shadow host: country -->
+    <div id="host-country"></div>
+
+    <!-- Shadow host: linkedin -->
+    <div id="host-linkedin"></div>
+
+    <!-- Hidden second-step section — used to test isVisible guard -->
+    <div id="step2-section" style="display:none">
+      <input type="text" data-automation-id="hiddenStepField">
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function attachField(hostId, automationId, tag, inputType, options) {
+        var host = document.getElementById(hostId);
+        var shadow = host.attachShadow({ mode: 'open' });
+        var wrapper = document.createElement('div');
+
+        if (tag === 'select') {
+          var sel = document.createElement('select');
+          sel.setAttribute('data-automation-id', automationId);
+          (options || []).forEach(function (opt) {
+            var o = document.createElement('option');
+            o.value = opt.value;
+            o.textContent = opt.label;
+            sel.appendChild(o);
+          });
+          wrapper.appendChild(sel);
+        } else {
+          var input = document.createElement('input');
+          input.setAttribute('data-automation-id', automationId);
+          input.type = inputType || 'text';
+          wrapper.appendChild(input);
+        }
+
+        shadow.appendChild(wrapper);
+      }
+
+      attachField('host-firstName', 'legalNameSection_firstName', 'input', 'text');
+      attachField('host-lastName',  'legalNameSection_lastName',  'input', 'text');
+      attachField('host-email',     'email',                      'input', 'email');
+      attachField('host-phone',     'phone-number',               'input', 'tel');
+      attachField('host-city',      'addressSection_city',        'input', 'text');
+      attachField('host-country',   'country',                    'select', null, [
+        { value: '',                    label: 'Select a Country' },
+        { value: 'United Arab Emirates', label: 'United Arab Emirates' },
+        { value: 'India',               label: 'India' },
+        { value: 'United States',       label: 'United States' },
+      ]);
+      attachField('host-linkedin',  'linkedIn',                   'input', 'text');
+    })();
+  </script>
+</body>
+</html>
