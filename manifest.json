@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "JobFill",
   "version": "1.0.0",
-  "description": "Auto-fills job application forms on Greenhouse, Lever, Workday, Ashby, iCIMS, LinkedIn, and Bayt",
+  "description": "Free job application autofill for Greenhouse, Lever, Workday, Ashby, iCIMS, LinkedIn & Bayt. Privacy-first — all data stays in your browser.",
   "permissions": ["storage", "scripting", "activeTab", "tabs"],
   "host_permissions": [
     "https://*.greenhouse.io/*",
