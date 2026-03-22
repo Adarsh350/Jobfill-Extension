@@ -3,7 +3,7 @@
   "name": "JobFill",
   "version": "1.0.0",
   "description": "Free job application autofill for major ATS platforms. Privacy-first — your profile data stays in your browser, never on a server.",
-  "permissions": ["storage", "scripting", "activeTab", "tabs"],
+  "permissions": ["storage", "scripting", "activeTab"],
   "host_permissions": [
     "https://*.greenhouse.io/*",
     "https://*.lever.co/*",
