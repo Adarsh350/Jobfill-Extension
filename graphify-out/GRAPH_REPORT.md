@@ -1,12 +1,12 @@
 # Graph Report - .  (2026-04-21)
 
 ## Corpus Check
-- 69 files · ~44,392 words
+- 48 files · ~35,010 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 264 nodes · 422 edges · 35 communities detected
-- Extraction: 77% EXTRACTED · 23% INFERRED · 0% AMBIGUOUS · INFERRED: 98 edges (avg confidence: 0.8)
+- 242 nodes · 412 edges · 22 communities detected
+- Extraction: 76% EXTRACTED · 24% INFERRED · 0% AMBIGUOUS · INFERRED: 98 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -32,19 +32,6 @@
 - [[_COMMUNITY_Community 19|Community 19]]
 - [[_COMMUNITY_Community 20|Community 20]]
 - [[_COMMUNITY_Community 21|Community 21]]
-- [[_COMMUNITY_Community 22|Community 22]]
-- [[_COMMUNITY_Community 23|Community 23]]
-- [[_COMMUNITY_Community 24|Community 24]]
-- [[_COMMUNITY_Community 25|Community 25]]
-- [[_COMMUNITY_Community 26|Community 26]]
-- [[_COMMUNITY_Community 27|Community 27]]
-- [[_COMMUNITY_Community 28|Community 28]]
-- [[_COMMUNITY_Community 29|Community 29]]
-- [[_COMMUNITY_Community 30|Community 30]]
-- [[_COMMUNITY_Community 31|Community 31]]
-- [[_COMMUNITY_Community 32|Community 32]]
-- [[_COMMUNITY_Community 33|Community 33]]
-- [[_COMMUNITY_Community 34|Community 34]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `fillField()` - 21 edges
@@ -63,85 +50,85 @@
   utils/storage.js → tests/unit/filler.test.js
 - `runFill()` --calls--> `startFill()`  [INFERRED]
   content.js → utils/filler.js
+- `runFill()` --calls--> `getProfile()`  [INFERRED]
+  content.js → utils/storage.js
 - `runFill()` --calls--> `getAnswerBank()`  [INFERRED]
   content.js → utils/storage.js
-- `runFill()` --calls--> `saveFillStatus()`  [INFERRED]
-  content.js → utils/storage.js
-- `runFill()` --calls--> `showResults()`  [INFERRED]
-  content.js → utils/overlay.js
+- `runFill()` --calls--> `fill()`  [INFERRED]
+  content.js → platforms/ashby.js
 
 ## Communities
 
 ### Community 0 - "Community 0"
 Cohesion: 0.08
-Nodes (29): set(), bindProfileAutoSave(), clearResumeUI(), closeModal(), collectProfile(), debounce(), deleteEntry(), escapeHtml() (+21 more)
+Nodes (30): set(), bindProfileAutoSave(), clearResumeUI(), closeModal(), collectProfile(), debounce(), deleteEntry(), escapeHtml() (+22 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.14
-Nodes (11): waitForElement(), fill(), fillStandardFields(), hasValue(), isEasyApplyContext(), resolveSelector(), sleep(), buildDom() (+3 more)
+Cohesion: 0.13
+Nodes (22): fill(), fillCustomQuestions(), fillStandardFields(), getJobDetails(), hasValue(), resolveSelector(), getUniqueSelector(), fill() (+14 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.17
-Nodes (15): fill(), fillCustomQuestions(), fillStandardFields(), getJobDetails(), hasValue(), resolveSelector(), runFill(), attachResume() (+7 more)
+Cohesion: 0.13
+Nodes (18): dispatchBlur(), attachResume(), dataUrlToFile(), findResumeFileInput(), shadowQuery(), shadowQueryAll(), fill(), fillStandardFields() (+10 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.19
-Nodes (15): fill(), fillCustomQuestions(), fillStandardFields(), getAdjacentLabel(), getJobDetails(), hasValue(), resolveSelector(), extractKeywords() (+7 more)
-
-### Community 4 - "Community 4"
-Cohesion: 0.19
 Nodes (9): exportData(), getStatus(), handleCommand(), handleMessage(), handleResumeUploadFallback(), importData(), mergeAnswerBank(), triggerFill() (+1 more)
 
+### Community 4 - "Community 4"
+Cohesion: 0.22
+Nodes (14): dispatchInputChange(), fillCheckbox(), fillInput(), fillRadio(), fillSelect(), fillTextarea(), fillField(), fill() (+6 more)
+
 ### Community 5 - "Community 5"
-Cohesion: 0.21
-Nodes (14): dispatchBlur(), dispatchInputChange(), fillCheckbox(), fillInput(), fillRadio(), fillSelect(), fillTextarea(), fillField() (+6 more)
+Cohesion: 0.25
+Nodes (11): runFill(), safeRuntimeCall(), endFill(), startFill(), dismiss(), _ensureHost(), _loadPosition(), _makeDraggable() (+3 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.21
 Nodes (9): attrMatches(), getAttrValue(), matchFirst(), nodeMatches(), nodeMatchesSingle(), parseHtml(), parseInto(), parseSelector() (+1 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.27
-Nodes (7): attrMatches(), getAttrValue(), matchFirst(), nodeMatches(), nodeMatchesSingle(), parseSelector(), parseSingle()
+Cohesion: 0.24
+Nodes (5): waitForElement(), buildDom(), makeButton(), makeElement(), MockMutationObserver
 
 ### Community 8 - "Community 8"
-Cohesion: 0.35
-Nodes (8): safeRuntimeCall(), dismiss(), _ensureHost(), _loadPosition(), _makeDraggable(), showBanner(), showButton(), showResults()
+Cohesion: 0.27
+Nodes (7): attrMatches(), getAttrValue(), matchFirst(), nodeMatches(), nodeMatchesSingle(), parseSelector(), parseSingle()
 
 ### Community 9 - "Community 9"
 Cohesion: 0.35
 Nodes (9): discoverFields(), fill(), fillCustomQuestions(), fillStandardFields(), getAdjacentLabel(), getJobDetails(), hasValue(), scoreField() (+1 more)
 
 ### Community 10 - "Community 10"
-Cohesion: 0.33
-Nodes (8): getUniqueSelector(), fill(), fillCustomQuestions(), fillStandardFields(), getAdjacentLabel(), getJobDetails(), hasValue(), resolveSelector()
-
-### Community 11 - "Community 11"
 Cohesion: 0.36
 Nodes (8): detectCrossOrigin(), fill(), fillCustomQuestions(), fillStandardFields(), getAdjacentLabel(), getJobDetails(), hasValue(), resolveSelector()
 
-### Community 12 - "Community 12"
+### Community 11 - "Community 11"
 Cohesion: 0.36
 Nodes (6): fill(), fillCustomQuestions(), fillStandardFields(), hasValue(), isNativeBaytForm(), resolveSelector()
+
+### Community 12 - "Community 12"
+Cohesion: 0.47
+Nodes (3): buildDom(), makeElement(), makeLabelEl()
 
 ### Community 13 - "Community 13"
 Cohesion: 0.47
 Nodes (3): buildDom(), makeElement(), makeLabelEl()
 
 ### Community 14 - "Community 14"
-Cohesion: 0.47
-Nodes (3): buildDom(), makeElement(), makeLabelEl()
-
-### Community 15 - "Community 15"
 Cohesion: 0.33
 Nodes (0): 
 
-### Community 16 - "Community 16"
+### Community 15 - "Community 15"
 Cohesion: 0.5
 Nodes (2): buildDom(), makeElement()
 
+### Community 16 - "Community 16"
+Cohesion: 1.0
+Nodes (0): 
+
 ### Community 17 - "Community 17"
-Cohesion: 0.67
+Cohesion: 1.0
 Nodes (0): 
 
 ### Community 18 - "Community 18"
@@ -160,103 +147,29 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 22 - "Community 22"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 23 - "Community 23"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 24 - "Community 24"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 25 - "Community 25"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 26 - "Community 26"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 27 - "Community 27"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 28 - "Community 28"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 29 - "Community 29"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 30 - "Community 30"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 31 - "Community 31"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 32 - "Community 32"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 33 - "Community 33"
-Cohesion: 1.0
-Nodes (0): 
-
-### Community 34 - "Community 34"
-Cohesion: 1.0
-Nodes (0): 
-
 ## Knowledge Gaps
-- **Thin community `Community 18`** (2 nodes): `make_png()`, `create_icons.py`
+- **Thin community `Community 16`** (2 nodes): `make_png()`, `create_icons.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 19`** (2 nodes): `App.jsx`, `App()`
+- **Thin community `Community 17`** (2 nodes): `title()`, `ashby.test.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 20`** (2 nodes): `Nav.jsx`, `Nav()`
+- **Thin community `Community 18`** (2 nodes): `makeSelect()`, `events.test.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 21`** (2 nodes): `Packages.jsx`, `Packages()`
+- **Thin community `Community 19`** (2 nodes): `workday.test.js`, `title()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 22`** (2 nodes): `Proof.jsx`, `Proof()`
+- **Thin community `Community 20`** (1 nodes): `run-all.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 23`** (2 nodes): `Testimonials.jsx`, `Testimonials()`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 24`** (2 nodes): `Hero.jsx`, `Hero()`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 25`** (2 nodes): `Footer.jsx`, `Footer()`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (2 nodes): `Contact.jsx`, `Contact()`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 27`** (2 nodes): `title()`, `ashby.test.js`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 28`** (2 nodes): `makeSelect()`, `events.test.js`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 29`** (2 nodes): `workday.test.js`, `title()`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 30`** (1 nodes): `vite.config.js`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 31`** (1 nodes): `index.js`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 32`** (1 nodes): `main.jsx`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 33`** (1 nodes): `run-all.js`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 34`** (1 nodes): `matcher.test.js`
+- **Thin community `Community 21`** (1 nodes): `matcher.test.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `attachResume()` connect `Community 2` to `Community 0`, `Community 1`, `Community 3`, `Community 5`, `Community 9`, `Community 10`, `Community 11`, `Community 12`?**
-  _High betweenness centrality (0.210) - this node is a cross-community bridge._
-- **Why does `getResume()` connect `Community 0` to `Community 2`, `Community 4`?**
-  _High betweenness centrality (0.175) - this node is a cross-community bridge._
-- **Why does `fillField()` connect `Community 5` to `Community 1`, `Community 2`, `Community 3`, `Community 9`, `Community 10`, `Community 11`, `Community 12`?**
-  _High betweenness centrality (0.142) - this node is a cross-community bridge._
+- **Why does `attachResume()` connect `Community 2` to `Community 0`, `Community 1`, `Community 4`, `Community 9`, `Community 10`, `Community 11`?**
+  _High betweenness centrality (0.250) - this node is a cross-community bridge._
+- **Why does `getResume()` connect `Community 0` to `Community 2`, `Community 3`?**
+  _High betweenness centrality (0.208) - this node is a cross-community bridge._
+- **Why does `fillField()` connect `Community 4` to `Community 1`, `Community 2`, `Community 9`, `Community 10`, `Community 11`?**
+  _High betweenness centrality (0.169) - this node is a cross-community bridge._
 - **Are the 19 inferred relationships involving `fillField()` (e.g. with `fillTextarea()` and `fillSelect()`) actually correct?**
   _`fillField()` has 19 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 9 inferred relationships involving `attachResume()` (e.g. with `getResume()` and `fill()`) actually correct?**
